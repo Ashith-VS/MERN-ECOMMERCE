@@ -1,0 +1,485 @@
+{
+  "login": [
+    {
+      "id": "email",
+      "label": "Email",
+      "type": "text",
+      "name": "email",
+      "placeholder": "enter your email",
+      "isrequired": true,
+      "ispattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+    },
+    {
+      "id": "password",
+      "label": "Password",
+      "type": "password",
+      "name": "password",
+      "placeholder": "enter your password",
+      "isrequired": true
+    }
+  ],
+  "Register": [
+    {
+      "id": "name",
+      "label": "User Name",
+      "name": "name",
+      "type": "text",
+      "placeholder": "name",
+      "isrequired": true
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "name": "email",
+      "type": "text",
+      "placeholder": "email",
+      "isrequired": true,
+      "ispattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile Number",
+      "name": "mobile",
+      "type": "text",
+      "maxLength": 10,
+      "placeholder": "mobile",
+      "ispattern": "^\\d{10}$",
+      "isrequired": true
+    },
+    {
+      "id": "password",
+      "label": "Password",
+      "name": "password",
+      "type": "password",
+      "maxLength": 20,
+      "minlength": 8,
+      "placeholder": "******",
+      "isrequired": true
+    }
+  ],
+  "admin": [
+    {
+      "type": "select",
+      "label": "Category",
+      "id": "categorySelect",
+      "name": "category",
+      "isrequired": true,
+      "options": [
+        { "id": "Electronics", "label": "Electronics" },
+        { "id": "Mensclothing", "label": "Mensclothing" },
+        { "id": "WomensClothing", "label": "WomensClothing" },
+        { "id": "Jewelery", "label": "Jewelery" }
+      ]
+    },
+    {
+      "id": "productName",
+      "label": "Product Name",
+      "type": "text",
+      "name": "productName",
+      "placeholder": "Enter product name",
+      "isrequired": true
+    },
+    {
+      "id": "productDescription",
+      "label": "Description",
+      "type": "textarea",
+      "name": "productDescription",
+      "placeholder": "Enter product description",
+      "isrequired": true
+    },
+    {
+      "id": "productPrice",
+      "label": "Price",
+      "type": "text",
+      "name": "productPrice",
+      "placeholder": "Enter product price",
+      "isrequired": true
+    },
+    {
+      "id": "discountPrice",
+      "label": "Discount(%)",
+      "type": "text",
+      "name": "discountPrice",
+      "placeholder": "Enter Discount price",
+      "isrequired": false
+    },
+    {
+      "type": "table",
+      "label": "Product Detail",
+      "name": "productDetail",
+      "tableData": [
+        { "type": "text", "name": "size" },
+        { "type": "text", "name": "color" },
+        { "type": "text", "name": "quantity" }
+      ],
+      "isrequired": false,
+      "referencekey": "category",
+      "referenceValue1": "Mensclothing",
+      "referenceValue2": "WomensClothing"
+    },
+    {
+      "id": "productCount",
+      "label": "Count",
+      "type": "text",
+      "name": "productCount",
+      "placeholder": "Enter product count",
+      "isrequired": true,
+      "referencekey": "category",
+      "referenceValue1": "Electronics",
+      "referenceValue2": "Jewelery"
+    },
+    {
+      "id": "productSize",
+      "label": "Size",
+      "type": "checkbox",
+      "name": "productSize",
+      "isrequired": false,
+      "options": [
+        { "id": "S", "label": "S" },
+        { "id": "M", "label": "M" },
+        { "id": "L", "label": "L" },
+        { "id": "XL", "label": "XL" },
+        { "id": "XXL", "label": "XXL" }
+      ],
+      "referencekey": "category",
+      "referenceValue1": "Mensclothing",
+      "referenceValue2": "WomensClothing"
+    },
+    {
+      "id": "productColor",
+      "label": "Color",
+      "type": "checkbox",
+      "name": "productColor",
+      "isrequired": true,
+      "options": [
+        { "id": "Red", "label": "Red" },
+        { "id": "Blue", "label": "Blue" },
+        { "id": "Green", "label": "Green" },
+        { "id": "Yellow", "label": "Yellow" }
+      ],
+      "referencekey": "category",
+      "referenceValue1": "Mensclothing",
+      "referenceValue2": "WomensClothing"
+    },
+    {
+      "id": "productImage",
+      "label": "Image URL",
+      "type": "text",
+      "name": "productImage",
+      "placeholder": "Enter product image URL",
+      "isrequired": true
+    }
+  ],
+  "contactInfo": [
+    {
+      "id": "email",
+      "label": "Email Address",
+      "type": "email",
+      "placeholder": "Email Address",
+      "isrequired": true,
+      "ispattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+      "patternErrorMessage": "Please enter a valid email address."
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile no",
+      "type": "tel",
+      "placeholder": "Mobile no",
+      "isrequired": true,
+      "ispattern": "^\\d{10}$",
+      "patternErrorMessage": "Mobile number must be 10 digits."
+    }
+  ],
+  "shippingInfo": [
+    {
+      "id": "name",
+      "label": "Name",
+      "type": "text",
+      "placeholder": "Name",
+      "isrequired": true
+    },
+    {
+      "id": "address1",
+      "label": "Address",
+      "type": "address",
+      "placeholder": "Address",
+      "isrequired": true
+    },
+    {
+      "id": "address2",
+      "label": "Address 2 (Optional)",
+      "type": "address",
+      "placeholder": "Address 2 (Optional)",
+      "isrequired": false
+    },
+    {
+      "id": "country",
+      "label": "Country",
+      "type": "select",
+      "options": [
+        { "value": "", "label": "-- Country --" },
+        { "value": "United States", "label": "United States" },
+        { "value": "Canada", "label": "Canada" },
+        { "value": "Mexico", "label": "Mexico" },
+        { "value": "Brazil", "label": "Brazil" }
+      ],
+      "isrequired": true
+    },
+    {
+      "id": "state",
+      "label": "State",
+      "type": "select",
+      "options": [
+        { "value": "", "label": "-- State --" },
+        { "value": "California", "label": "California" },
+        { "value": "Texas", "label": "Texas" },
+        { "value": "Florida", "label": "Florida" },
+        { "value": "Georgia", "label": "Georgia" },
+        { "value": "Ohio", "label": "Ohio" },
+        { "value": "New York", "label": "New York" }
+      ],
+      "isrequired": true
+    },
+    {
+      "id": "zip",
+      "label": "Zip",
+      "type": "zip",
+      "placeholder": "Zip",
+      "isrequired": true,
+      "ispattern": "^\\d{6}$",
+      "patternErrorMessage": "ZIP code must be 6 digits"
+    }
+  ],
+  "billinginfo": [
+    {
+      "id": "name2",
+      "label": "Name",
+      "type": "text",
+      "placeholder": "Name",
+      "isrequired": true
+    },
+    {
+      "id": "address21",
+      "label": "Address",
+      "type": "address",
+      "placeholder": "Address",
+      "isrequired": true
+    },
+    {
+      "id": "address22",
+      "label": "Address 2 (Optional)",
+      "type": "address",
+      "placeholder": "Address 2 (Optional)",
+      "isrequired": false
+    },
+    {
+      "id": "country2",
+      "label": "Country",
+      "type": "select",
+      "options": [
+        { "value": "", "label": "-- Country --" },
+        { "value": "United States", "label": "United States" },
+        { "value": "Canada", "label": "Canada" },
+        { "value": "Mexico", "label": "Mexico" },
+        { "value": "Brazil", "label": "Brazil" }
+      ],
+      "isrequired": true
+    },
+    {
+      "id": "state2",
+      "label": "State",
+      "type": "select",
+      "options": [
+        { "value": "", "label": "-- State --" },
+        { "value": "California", "label": "California" },
+        { "value": "Texas", "label": "Texas" },
+        { "value": "Florida", "label": "Florida" },
+        { "value": "Georgia", "label": "Georgia" },
+        { "value": "Ohio", "label": "Ohio" },
+        { "value": "New York", "label": "New York" }
+      ],
+      "isrequired": true
+    },
+    {
+      "id": "zip2",
+      "label": "Zip",
+      "type": "zip",
+      "placeholder": "Zip",
+      "isrequired": true,
+      "ispattern": "^\\d{6}$",
+      "patternErrorMessage": "ZIP code must be 6 digits"
+    }
+  ],
+
+  "paymentDetails": [
+    {
+      "id": "nameOnCard",
+      "label": "Name on card",
+      "type": "text",
+      "placeholder": "Name on card",
+      "isrequired": true
+    },
+    {
+      "id": "cardNumber",
+      "label": "Card number",
+      "type": "texts",
+      "placeholder": "Card number",
+      "isrequired": true,
+      "ispattern": "^[0-9]{12}$",
+      "patternErrorMessage": "Card number must be between 13 and 19 digits."
+    },
+    {
+      "id": "expMonth",
+      "label": "Expiration month",
+      "type": "textss",
+      "placeholder": "Expiration month",
+      "isrequired": true,
+      "maxlength": 2,
+      "ispattern": "^\\d{2}$",
+      "patternErrorMessage": "Expiration month must be between 01 and 12."
+    },
+    {
+      "id": "expYear",
+      "label": "Expiration year",
+      "type": "textss",
+      "placeholder": "Expiration year",
+      "isrequired": true,
+      "maxlength": 2,
+      "ispattern": "^\\d{2}$",
+      "patternErrorMessage": "Expiration year must be between 23 and 39."
+    },
+    {
+      "id": "cvv",
+      "label": "CVV",
+      "type": "textss",
+      "placeholder": "CVV",
+      "maxlength": 3,
+      "isrequired": true,
+      "ispattern": "^[0-9]{3}$",
+      "patternErrorMessage": "CVV must be 3 or 4 digits."
+    }
+  ],
+  "profileUpdate": [
+    {
+      "type": "file",
+      "label": "Profile Image",
+      "name": "profileImage",
+      "id": "profileImage",
+      "placeholder": "Profile Image",
+      "isrequired": true
+    },
+    {
+      "type": "text",
+      "label": "Name",
+      "name": "Name",
+      "id": "Name",
+      "placeholder": "Your name",
+      "isrequired": true
+    },
+    {
+      "type": "text",
+      "label": "Mobile",
+      "name": "Phone",
+      "id": "Phone",
+      "placeholder": "Mobile no",
+      "isrequired": true
+    },
+    {
+      "type": "text",
+      "label": "Email",
+      "name": "Email",
+      "id": "Email",
+      "placeholder": "Your Email",
+      "isrequired": true
+    },
+    {
+      "type": "text",
+      "label": "Address",
+      "name": "Address",
+      "id": "Address",
+      "placeholder": "Your Address",
+      "isrequired": true
+    },
+    {
+      "type": "text",
+      "label": "DOB",
+      "name": "DOB",
+      "id": "DOB",
+      "placeholder": "dd-mm-yyyy",
+      "isrequired": true
+    }
+  ],
+  "profileDetail": [
+    {
+      "type": "file",
+      "label": "Profile Image",
+      "name": "profileImage",
+      "id": "profileImage",
+      "placeholder": "Profile Image"
+    },
+    {
+      "type": "text",
+      "label": "Name",
+      "name": "Name",
+      "id": "Name",
+      "placeholder": "Your name"
+    },
+    {
+      "type": "text",
+      "label": "Mobile",
+      "name": "Phone",
+      "id": "Phone",
+      "placeholder": "Mobile no"
+    },
+    {
+      "type": "text",
+      "label": "Email",
+      "name": "Email",
+      "id": "Email",
+      "placeholder": "Your Email"
+    },
+    {
+      "type": "text",
+      "label": "Address",
+      "name": "Address",
+      "id": "Address",
+      "placeholder": "Your Address"
+    },
+    {
+      "type": "text",
+      "label": "DOB",
+      "name": "DOB",
+      "id": "DOB",
+      "placeholder": "dd-mm-yyyy"
+    }
+  ],
+  "changePassword": [
+    {
+      "id": "currentPassword",
+      "label": "Current Password",
+      "type": "password",
+      "placeholder": "Current Password",
+      "isrequired": true,
+      "maxlength": 20,
+      "minlength": 6
+    },
+    {
+      "id": "confirmPassword",
+      "label": "Confirm Password",
+      "type": "password",
+      "placeholder": "Confirm Password",
+      "isrequired": true,
+      "maxlength": 20,
+      "minlength": 6
+    },
+    {
+      "id": "newPassword",
+      "label": "New Password",
+      "type": "password",
+      "placeholder": "New Password",
+      "isrequired": true,
+      "maxlength": 20,
+      "minlength": 6
+    }
+  ]
+}
