@@ -21,7 +21,6 @@ const PrivateRoute = () => {
   // if (isEmpty(currentUser)) {
   //   return <Navigate to="/" />;
   // }
-
   // return <Outlet />;
   return !isEmpty(currentUser) ? <Outlet /> : <Navigate to={"/"} />;
 };

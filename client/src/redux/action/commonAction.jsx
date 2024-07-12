@@ -85,6 +85,8 @@ export const setFilteredData = (id) => {
 };
 
 export const AddWishList = (response, currentUser) => {
+  console.log('currentUser: ', currentUser);
+  console.log('response: ', response);
   return async (dispatch) => {
     try {
       const res = await fetchData("/addwishlist", "post", {
@@ -131,21 +133,16 @@ export const GetWishlist = (currentUser) => {
 };
 
 export const cartItems = (response, currentUser) => {
-  console.log(response)
-  // localStorage.setItem("addtocart", JSON.stringify(response));
+  // console.log('currentUser: ', currentUser);
+  // console.log(response)
   return async (dispatch) => {
     dispatch(showLoader(true));
     try {
       const res = await fetchData("/addtoCart", "POST", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
           userId: currentUser,
           item: response,
-        },
       });
-      // console.log(res);
+      console.log(res);
       dispatch({
         type: CART_ITEMS,
         payload: res,
@@ -158,11 +155,11 @@ export const cartItems = (response, currentUser) => {
 };
 
 export const getCartItem = (currentUser) => {
-  // console.log(currentUser)
+  console.log(currentUser)
   return async (dispatch) => {
     dispatch(showLoader(true));
     try {
-      const res = await fetchData("/cart", "post", {
+      const res = await fetchData("/cart", "get", {
         headers: {
           "Content-Type": "application/json",
         },

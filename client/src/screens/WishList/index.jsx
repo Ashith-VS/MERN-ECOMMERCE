@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  AddWishList,
-  GetWishlist,
-  cartItems,
-} from "../../redux/action/commonAction";
+import {AddWishList,GetWishlist,cartItems} from "../../redux/action/commonAction";
 import { isEmpty } from "lodash";
 
 const WishList = () => {
@@ -31,9 +27,7 @@ const WishList = () => {
 
   const handleAddToWishlist = async(item) => {
     const productExists = wishList.find((product) => product.id === item.id);
-    const updatedWishlist = wishList.filter(
-      (product) => product.id !== item.id
-    );
+    const updatedWishlist = wishList.filter((product) => product.id !== item.id);
     if (productExists) {
       await dispatch(AddWishList(updatedWishlist, currentUser?.uid));
     } else {

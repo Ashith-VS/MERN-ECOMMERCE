@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Loader from "../components/Loader";
 import TopMenu from "../components/TopMenu";
 import ScrollToTop from "../components/ScrollToTop";
-import {Registration,Login,NotFound,Home,Admin,Allproducts,ProductDetail,Category,Profile} from "../screens";
+import {Registration,Login,NotFound,Home,Admin,Allproducts,ProductDetail,Category,Profile, Blog, Contact, Support, Notification, WishList, Orders, Cart} from "../screens";
 import PrivateRoute from "../utils/PrivateRoute";
 
 const Router = () => {
@@ -20,23 +20,25 @@ const Router = () => {
            <Route path="/admin" element={<Admin />} />
           <Route path="/admin/:id" element={<Admin />} />
           <Route path="/profile" element={<Profile />} />
-         {/* <Route path="/wishlist" element={<WishList />} />
-          <Route path="/orders" element={<Orders />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<WishList />} />
+          <Route path="/orders" element={<Orders />} />
+         {/* 
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/invoice/:id" element={<Invoice />} />
           <Route path="/users" element={<Users />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/support" element={<Support />} />
+          */}
           <Route path="/notification" element={<Notification />} />
-          <Route path="/contact-us" element={<Contact />} /> */}
+          <Route path="/support" element={<Support />} />
         </Route>
         <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<Login/>} />
+        <Route path="/signup" element={<Registration />} />
         <Route path="/dealsofDay" element={<Allproducts />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/category/:id" element={<Category />} />
-        <Route path="/signin" element={<Login/>} />
-        <Route path="/signup" element={<Registration />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/contact-us" element={<Contact />}/>
         <Route path="*" element={<NotFound/>} />
       </Routes>
       <Footer />

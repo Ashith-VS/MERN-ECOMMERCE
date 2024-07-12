@@ -1,20 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  AddWishList,
-  GetWishlist,
-  cartItems,
-  getCartItem,
-  setCategoryData,
-} from "../../redux/action/commonAction";
+import {AddWishList,GetWishlist,cartItems,getCartItem,setCategoryData} from "../../redux/action/commonAction";
 
 const CategoryDetail = ({ viewMode }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { productData, cartItem, wishList, categoryData } = useSelector(
-    (state) => state.commonReducer
-  );
+  const { productData, cartItem, wishList, categoryData } = useSelector((state) => state.commonReducer);
 
   const { currentUser } = useSelector((state) => state.authReducer);
   const { id } = useParams();
@@ -46,23 +38,23 @@ const CategoryDetail = ({ viewMode }) => {
       return;
     } else {
       await dispatch(
-        cartItems([...cartItem, productCountupdate], currentUser?.uid)
+        cartItems([...cartItem, productCountupdate], currentUser?._id)
       );
-      await dispatch(getCartItem(currentUser?.uid));
+      await dispatch(getCartItem(currentUser?._id));
     }
   };
 
   const handleAddToWishlist = async (item) => {
+    // console.log('item: ', item);
     const productExists = wishList?.find((product) => product.id === item.id);
-    const updatedWishlist = wishList?.filter(
-      (product) => product.id !== item.id
-    );
+    console.log('productExists: ', productExists);
+    const updatedWishlist = wishList?.filter((product) => product.id !== item.id);
     if (productExists) {
-      await dispatch(AddWishList(updatedWishlist, currentUser?.uid));
-      await dispatch(GetWishlist(currentUser?.uid));
+      await dispatch(AddWishList(updatedWishlist, currentUser?._id));
+      await dispatch(GetWishlist(currentUser?._id));
     } else {
-      await dispatch(AddWishList([...wishList, item], currentUser?.uid));
-      await dispatch(GetWishlist(currentUser?.uid));
+      await dispatch(AddWishList([...wishList, item], currentUser?._id));
+      await dispatch(GetWishlist(currentUser?._id));
     }
   };
 

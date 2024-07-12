@@ -7,16 +7,16 @@ import Allproducts from "./Allproducts";
 import ProductDetail from "./ProductDetail";
 import Category from "./Category";
 import Profile from "./Profile";
-// import Orders from "./Orders";
-// import WishList from "./WishList";
-// import Notification from "./Notification";
-// import Support from "./Support";
+import Cart from "./Cart";
+import WishList from "./WishList";
+import Orders from "./Orders";
 // import Checkout from "./Checkout";
-// import Contact from "./Contact";
-// import Blog from "./Blog";
-// import Cart from "./Cart";
 // import Invoice from "./Invoice";
 // import Users from "./Users";
+import Notification from "./Notification";
+import Support from "./Support";
+import Contact from "./Contact";
+import Blog from "./Blog";
 export {
   Login,
   Registration,
@@ -27,14 +27,14 @@ export {
   ProductDetail,
   Category,
   Profile,
-  // Orders,
-  // WishList,
-  // Notification,
-  // Support,
+  Cart,
+  WishList,
+  Orders,
   // Checkout,
-  // Contact,
-  // Blog,
-  // Cart,
   // Invoice,
   // Users,
+  Notification,
+  Support,
+  Contact,
+  Blog
 };

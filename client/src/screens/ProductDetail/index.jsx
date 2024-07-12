@@ -4,22 +4,16 @@ import Accordion from "./Accordion";
 import FeaturedProducts from "./FeaturedProducts";
 import { isEmpty, round } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  AddWishList,
-  GetWishlist,
-  cartItems,
-  getCartItem,
-  setFilteredData,
-} from "../../redux/action/commonAction";
+import {AddWishList,GetWishlist,cartItems,getCartItem,setFilteredData} from "../../redux/action/commonAction";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authReducer);
-  const { cartItem, wishList, filteredData } = useSelector(
-    (state) => state.commonReducer
-  );
+  console.log('currentUser: ', currentUser);
+  const { cartItem, wishList, filteredData } = useSelector((state) => state.commonReducer);
+
   const [formData, setFormData] = useState({
     productCount: 1,
     productColor: "",
@@ -60,9 +54,7 @@ const ProductDetail = () => {
           productSize: formData?.productSize,
           totalPrice: filteredData?.productPrice * formData?.productCount,
         };
-        await dispatch(
-          AddWishList([...wishList, newWishlistItem], currentUser?.uid)
-        );
+        await dispatch(AddWishList([...wishList, newWishlistItem], currentUser?.uid));
         await dispatch(GetWishlist(currentUser?.uid));
       } else {
         alert("Please login to use Add to Wishlist");
@@ -71,6 +63,7 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
+    console.log('filteredData: ', filteredData);
     if (filteredData?.productCount === 0) {
       navigate("/");
       return;
@@ -80,7 +73,9 @@ const ProductDetail = () => {
     //   return;
     // }
     const cartItemsArray = cartItem ?? [];
+    console.log('cartItem: ', cartItem);
     const productExists = cartItemsArray?.find((item) => item.id === id);
+    // console.log('productExists: ', productExists);
     if (productExists) {
       navigate("/cart");
       setFormData({
@@ -91,28 +86,29 @@ const ProductDetail = () => {
       return;
     } else {
       const value = {
-        id: filteredData?.id,
-        productName: filteredData?.productName,
-        productDescription: filteredData?.productDescription,
-        productImage: filteredData?.productImage,
+        id: filteredData?._id,
+        // productName: filteredData?.productName,
+        // productDescription: filteredData?.productDescription,
+        // productImage: filteredData?.productImage,
         productPrice: filteredData?.productPrice,
         productCount: formData?.productCount || null,
         productColor: formData?.productColor || null,
         productSize: formData?.productSize || null,
         totalPrice: filteredData?.productPrice * formData?.productCount || null,
       };
-      if (!isEmpty(currentUser.uid)) {
-        // console.log(cartItemsArray)
-        await dispatch(cartItems([...cartItemsArray, value], currentUser?.uid));
-        await dispatch(getCartItem(currentUser?.uid));
-        navigate("/cart");
+      if (!isEmpty(currentUser?._id)) {
+        console.log(cartItemsArray)
+        await dispatch(cartItems([...cartItemsArray, value], currentUser?._id));
+        // await dispatch(getCartItem(currentUser?._id));
+        // navigate("/cart");
         // clear formData for each updation
         // setFormData({
         //   productCount: 1,
         //   productColor: "",
         //   productSize: "",
         // });
-      } else {
+      } 
+      else {
         alert("Please login to use Add to Cart");
       }
     }

@@ -4,11 +4,7 @@ import img from "../../assets/images/banner/image-1400x250.jpg";
 import { useEffect, useState } from "react";
 import Services from "./Services";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  GetProductData,
-  setCategoryData,
-  showLoader,
-} from "../../redux/action/commonAction";
+import {GetProductData,setCategoryData,showLoader,} from "../../redux/action/commonAction";
 import { isEmpty } from "lodash";
 const Category = () => {
   const { id } = useParams();

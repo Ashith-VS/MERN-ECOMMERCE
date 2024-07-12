@@ -56,7 +56,7 @@ const googleLogin = async(req, res) => {
         user = new UserData({
        name,
        email,
-       mobile:"",
+       mobile:"", 
        password: '', // No password for Google login users
       });
       await user.save();

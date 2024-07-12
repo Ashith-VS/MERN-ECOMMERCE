@@ -44,5 +44,36 @@ const ProductSchema = new mongoose.Schema({
     productData:[VariantSchema]
 })
 
+const cartItemSchema= new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
+  wishListItems:[{
+    id: {
+      type: String,
+      required: true,
+    },
+    productCount: {
+      type: Number,
+      required: true,
+    },
+    productColor: {
+      type: String,
+      required: true,
+    },
+    productSize: {
+      type: String,
+      required: true,
+    },
+    totalPrice:{
+      type: Number,
+      required: true,
+    }
+  }]
+})
+// Create a model from the schema
 const productDataModel= mongoose.model('Product', ProductSchema)
-module.exports ={productDataModel}
+const  CartItemModel= mongoose.model('cartItem', cartItemSchema)
+
+module.exports ={productDataModel,CartItemModel}

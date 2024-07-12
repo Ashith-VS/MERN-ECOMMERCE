@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import img1 from "../../assets/images/payment/payments.webp";
-import {
-  AddWishList,
-  GetProductData,
-  GetWishlist,
-  cartItems,
-  getCartItem,
-} from "../../redux/action/commonAction";
+import { AddWishList,GetProductData,GetWishlist,cartItems,getCartItem,} from "../../redux/action/commonAction";
 import ReactModal from "react-modal";
 
 const Cart = () => {
@@ -16,8 +10,12 @@ const Cart = () => {
   const { cartItem, wishList, productData } = useSelector((state) => state.commonReducer);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authReducer);
+  // console.log('currentUser: ', currentUser);
   const [formData, setFormData] = useState({});
   const [canCheckout, setCanCheckout] = useState(true);
+  useEffect(() => {
+    dispatch(getCartItem(currentUser?._id));
+  }, []);
 
   useEffect(() => {
     const hasInvalidQuantity = cartItem?.some((item) => {
@@ -40,9 +38,7 @@ const Cart = () => {
     dispatch(GetProductData());
   }, [cartItem]);
 
-  useEffect(() => {
-    dispatch(getCartItem(currentUser?.uid));
-  }, []);
+ 
 
   const handleRemoveItem = async (data) => {
     const removeData = cartItem.filter((item) => item.id !== data.id);
