@@ -26,7 +26,7 @@ import axios from "axios";
 
 export const baseURL = "http://localhost:4000";
 
-const fetchData = async (endpoint, method = 'GET', data = null, headers = {}) => {
+const fetchData = async (endpoint, method = 'GET', data = {}, headers = {}) => {
     const config = {
         url: baseURL + endpoint,
         method: method.toUpperCase(),
@@ -34,7 +34,7 @@ const fetchData = async (endpoint, method = 'GET', data = null, headers = {}) =>
             'Content-Type': 'application/json', // Ensure JSON content type
             ...headers, 
         },
-        ...(data && { data }),
+         data ,
     };
     // console.log("config:", config);
 

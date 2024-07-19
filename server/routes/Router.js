@@ -1,7 +1,7 @@
 const express = require('express')
 const { loginUser, registerUser, currentUser, googleLogin } = require('../controller/userController')
 const verifyToken = require('../middleware/authMiddleware')
-const { allProductList, addProduct, singleProductList, addToCart, addToWishlist, getCartItems, } = require('../controller/productController')
+const { allProductList, addProduct, singleProductList, addToCart, getCartItems, removeCartItems, addToWishlist } = require('../controller/productController')
 
 const router = express.Router()
 
@@ -13,7 +13,8 @@ router.post('/addProduct', addProduct)
 router.get('/productlist', allProductList)
 router.get('/productDetails/:id', singleProductList)
 router.post('/addtoCart', addToCart)
-router.get("/cart", getCartItems)
+router.get("/cart/:id", getCartItems)
+router.post('/deletecart', removeCartItems)
 router.post('/addwishlist', addToWishlist)
 
 module.exports = router

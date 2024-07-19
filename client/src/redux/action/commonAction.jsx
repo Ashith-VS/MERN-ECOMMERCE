@@ -16,6 +16,7 @@ import {
   DELETE_PRODUCT_DATA,
   ADD_PRODUCT_DATA,
   UPDATE_PRODUCT_DATA,
+  DELETE_CART_ITEM,
 } from "../../../../client/src/constants/constants";
 import { format } from "date-fns";
 import fetchData from "../../../../client/src/http/api";
@@ -84,21 +85,67 @@ export const setFilteredData = (id) => {
   };
 };
 
+export const cartItems = (response, currentUser) => {
+  return async (dispatch) => {
+    dispatch(showLoader(true));
+    try {
+      const res = await fetchData("/addtoCart", "POST", {
+          userId: currentUser,
+          item: response,
+      });
+      console.log(res);
+      dispatch({
+        type: CART_ITEMS,
+        payload: res,
+      });
+      dispatch(showLoader(false));
+    } catch (error) {
+      dispatch(showLoader(false));
+    }
+  };
+};
+
+export const getCartItem = (id) => {
+  return async (dispatch) => {
+    dispatch(showLoader(true));
+    try {
+      const res = await fetchData(`/cart/${id}`, "get");
+      dispatch({
+        type: GET_CART_ITEMS,
+        payload: res?.data?.cartItems,
+      });
+      dispatch(showLoader(false));
+    } catch (error) {
+      console.error(error);
+      dispatch(showLoader(false));
+    }
+  };
+};
+
+export const deleteCartItem=(itemId,userId)=>{
+  return async (dispatch)=>{
+    try {
+      const res =await fetchData(`/deletecart`,"post",{userId,itemId})
+      dispatch({
+        type: DELETE_CART_ITEM,
+        payload: res,
+      });
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
+
 export const AddWishList = (response, currentUser) => {
   console.log('currentUser: ', currentUser);
   console.log('response: ', response);
   return async (dispatch) => {
     try {
       const res = await fetchData("/addwishlist", "post", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          userId: currentUser,
-          item: response,
-        },
+        userId: currentUser,
+        item: response,
       });
-      
+      console.log('res: ', res);
       dispatch({
         type: ADD_TO_WISHLIST,
         payload: res,
@@ -128,54 +175,6 @@ export const GetWishlist = (currentUser) => {
       });
     } catch (error) {
       console.error(error);
-    }
-  };
-};
-
-export const cartItems = (response, currentUser) => {
-  // console.log('currentUser: ', currentUser);
-  // console.log(response)
-  return async (dispatch) => {
-    dispatch(showLoader(true));
-    try {
-      const res = await fetchData("/addtoCart", "POST", {
-          userId: currentUser,
-          item: response,
-      });
-      console.log(res);
-      dispatch({
-        type: CART_ITEMS,
-        payload: res,
-      });
-      dispatch(showLoader(false));
-    } catch (error) {
-      dispatch(showLoader(false));
-    }
-  };
-};
-
-export const getCartItem = (currentUser) => {
-  console.log(currentUser)
-  return async (dispatch) => {
-    dispatch(showLoader(true));
-    try {
-      const res = await fetchData("/cart", "get", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          userId: currentUser,
-        },
-      });
-      // console.log(res[0]?.item);
-      dispatch({
-        type: GET_CART_ITEMS,
-        payload: res[0]?.item,
-      });
-      dispatch(showLoader(false));
-    } catch (error) {
-      console.error(error);
-      dispatch(showLoader(false));
     }
   };
 };

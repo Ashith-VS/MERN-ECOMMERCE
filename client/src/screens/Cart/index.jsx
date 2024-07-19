@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import img1 from "../../assets/images/payment/payments.webp";
-import { AddWishList,GetProductData,GetWishlist,cartItems,getCartItem,} from "../../redux/action/commonAction";
+import { AddWishList,GetProductData,GetWishlist,cartItems,deleteCartItem,getCartItem,} from "../../redux/action/commonAction";
 import ReactModal from "react-modal";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const { cartItem, wishList, productData } = useSelector((state) => state.commonReducer);
+  console.log('cartItem: ', cartItem);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authReducer);
-  // console.log('currentUser: ', currentUser);
+  console.log('currentUser: ', currentUser);
   const [formData, setFormData] = useState({});
   const [canCheckout, setCanCheckout] = useState(true);
   useEffect(() => {
@@ -38,31 +39,25 @@ const Cart = () => {
     dispatch(GetProductData());
   }, [cartItem]);
 
- 
-
   const handleRemoveItem = async (data) => {
-    const removeData = cartItem.filter((item) => item.id !== data.id);
-    await dispatch(cartItems(removeData, currentUser?.uid));
-    await dispatch(getCartItem(currentUser?.uid));
+    await dispatch(deleteCartItem(data?._id,currentUser?._id));
+    await dispatch(getCartItem(currentUser?._id));
   };
 
   const handleAddToWishlist = async (item) => {
-    const productExists =
-      Array.isArray(wishList) &&
-      wishList?.find((product) => product.id === item.id);
-    const updatedWishlist =
-      Array.isArray(wishList) &&
-      wishList?.filter((product) => product.id !== item.id);
+    console.log('item: ', item);
+    const productExists =Array.isArray(wishList) && wishList?.find((product) => product.id === item.id);
+    const updatedWishlist =Array.isArray(wishList) &&wishList?.filter((product) => product.id !== item.id);
     if (productExists) {
-      await dispatch(AddWishList(updatedWishlist, currentUser?.uid));
-      await dispatch(GetWishlist(currentUser?.uid));
+      await dispatch(AddWishList(updatedWishlist, currentUser?._id));
+      // await dispatch(GetWishlist(currentUser?._id));
     } else {
-      await dispatch(AddWishList([...wishList, item], currentUser?.uid));
-      await dispatch(GetWishlist(currentUser?.uid));
+      await dispatch(AddWishList([...wishList, item], currentUser?._id));
+      // await dispatch(GetWishlist(currentUser?._id));
     }
   };
 
-  const totalPrice = cartItem?.reduce((total, item, i, array) => {
+  const totalPrice = cartItem&&cartItem?.reduce((total, item, i, array) => {
     const price = Number(item.productPrice) * item.productCount;
     return total + price;
   }, 0);

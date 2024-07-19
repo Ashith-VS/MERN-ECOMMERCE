@@ -3,10 +3,8 @@ import { useSelector } from "react-redux";
 
 const Deals = () => {
   const { productData } = useSelector((state) => state.commonReducer);
-
-  const AvailableProduct = productData?.filter(
-    (item) => item.productCount !== 0
-  );
+  const AvailableProduct = productData?.filter((item) => item.productCount !== 0);
+  // console.log('AvailableProduct: ', AvailableProduct);
 
   return (
     <div className="container-fluid bg-light mb-3">
@@ -24,11 +22,7 @@ const Deals = () => {
       </div>
       <div className="d-flex flex-wrap justify-content-start">
         {AvailableProduct?.slice(0, 8).map((item) => (
-          <div
-            className="col-md-3 "
-            key={item.id}
-            style={{ marginBottom: "20px" }}
-          >
+          <div className="col-md-3 "key={item.id} style={{ marginBottom: "20px" }}>
             <Link className="text-decoration-none" to={`/product/${item.id}`}>
               <div className="card text-center" style={{ height: "100%" }}>
                 <div className="card-body" style={{ height: "100%" }}>

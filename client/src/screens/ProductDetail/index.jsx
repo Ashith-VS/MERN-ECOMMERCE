@@ -13,6 +13,7 @@ const ProductDetail = () => {
   const { currentUser } = useSelector((state) => state.authReducer);
   console.log('currentUser: ', currentUser);
   const { cartItem, wishList, filteredData } = useSelector((state) => state.commonReducer);
+  console.log('filteredData: ', filteredData);
 
   const [formData, setFormData] = useState({
     productCount: 1,
@@ -87,9 +88,9 @@ const ProductDetail = () => {
     } else {
       const value = {
         id: filteredData?._id,
-        // productName: filteredData?.productName,
-        // productDescription: filteredData?.productDescription,
-        // productImage: filteredData?.productImage,
+        productName: filteredData?.productName,
+        productDescription: filteredData?.productDescription,
+        productImage: filteredData?.productImage,
         productPrice: filteredData?.productPrice,
         productCount: formData?.productCount || null,
         productColor: formData?.productColor || null,

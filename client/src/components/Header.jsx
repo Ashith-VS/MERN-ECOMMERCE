@@ -6,16 +6,19 @@ import { isEmpty } from "lodash";
 import img from "../assets/images/image-logo-151x42.jpg";
 import SearchBar from "./SearchBar";
 // import { getCartItem } from "../redux/action/commonAction";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import fetchData from "../http/api";
 import { CurrentUserAuth } from "../redux/action/authAction";
 import { googleLogout } from "@react-oauth/google";
+import LoginModal from "./LoginModal";
 
 const Header = () => {
-  const dispatch = useDispatch();
+const dispatch = useDispatch();
 const {token,currentUser}=useSelector((state)=>state.authReducer)
+console.log('currentUser: ', currentUser);
 const { cartItem } = useSelector((state) => state.commonReducer);
-
+const [showModal, setShowModal] = useState(false);
+console.log('showModal: ', showModal);
 // console.log(token)
   const getCurrentUser=async()=>{
     try {
@@ -37,7 +40,16 @@ const { cartItem } = useSelector((state) => state.commonReducer);
     localStorage.clear();
     window.location.reload();
   };
+  
 
+  const handleCartClick = (e) => {
+    if (isEmpty(currentUser)) {
+      e.preventDefault(); // Prevent the default action
+      setShowModal(true); // Show the login modal
+    }
+  };
+
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <header className="p-3 border-bottom bg-light">
@@ -51,12 +63,13 @@ const { cartItem } = useSelector((state) => state.commonReducer);
           <SearchBar />
           <div className="col-md-4">
             <div className="position-relative d-inline me-3">
-              <Link className="btn btn-primary" to="/cart">
+              <Link className="btn btn-primary" to="/cart" onClick={handleCartClick}>
                 <i className="bi bi-cart3" />
                 <div className="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle">
                   {!isEmpty(cartItem) && cartItem.length}
                 </div>
               </Link>
+              <LoginModal show={showModal} handleClose={handleCloseModal} />
             </div>
             <div className="btn-group">
               <button
