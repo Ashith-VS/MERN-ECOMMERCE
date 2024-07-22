@@ -8,12 +8,12 @@ import ReactModal from "react-modal";
 const Cart = () => {
   const dispatch = useDispatch();
   const { cartItem, wishList, productData } = useSelector((state) => state.commonReducer);
-  console.log('cartItem: ', cartItem);
+  console.log('productData: ', productData);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authReducer);
-  console.log('currentUser: ', currentUser);
   const [formData, setFormData] = useState({});
   const [canCheckout, setCanCheckout] = useState(true);
+
   useEffect(() => {
     dispatch(getCartItem(currentUser?._id));
   }, []);
@@ -45,20 +45,20 @@ const Cart = () => {
   };
 
   const handleAddToWishlist = async (item) => {
-    console.log('item: ', item);
     const productExists =Array.isArray(wishList) && wishList?.find((product) => product.id === item.id);
     const updatedWishlist =Array.isArray(wishList) &&wishList?.filter((product) => product.id !== item.id);
     if (productExists) {
-      await dispatch(AddWishList(updatedWishlist, currentUser?._id));
-      // await dispatch(GetWishlist(currentUser?._id));
+     // If product exists, remove it from the wishlist
+     await dispatch(AddWishList(updatedWishlist, currentUser?._id));
     } else {
+      // If product does not exist, add it to the wishlist
       await dispatch(AddWishList([...wishList, item], currentUser?._id));
-      // await dispatch(GetWishlist(currentUser?._id));
     }
+    await dispatch(GetWishlist(currentUser?._id));
   };
 
   const totalPrice = cartItem&&cartItem?.reduce((total, item, i, array) => {
-    const price = Number(item.productPrice) * item.productCount;
+    const price = Number(item.totalPrice) * item.productCount;
     return total + price;
   }, 0);
 
@@ -67,16 +67,9 @@ const Cart = () => {
     if (updatedCounts[product.id] > 1) {
       updatedCounts[product.id] = updatedCounts[product.id] - 1;
       setFormData(updatedCounts);
-      const updatedCart = cartItem?.map((item) =>
-        item.id === product.id
-          ? {
-              ...item,
-              productCount: updatedCounts[product.id],
-            }
-          : item
-      );
-      await dispatch(cartItems(updatedCart, currentUser?.uid));
-      await dispatch(getCartItem(currentUser?.uid));
+      const updatedCart = cartItem?.map((item) =>item.id === product.id? {...item,productCount: updatedCounts[product.id],}: item);
+      await dispatch(cartItems(updatedCart, currentUser?._id));
+      await dispatch(getCartItem(currentUser?._id));
     } else {
       alert("You can't have less than 1 item");
     }
@@ -84,36 +77,26 @@ const Cart = () => {
 
   const handleProductIncrement = async (product) => {
     const updatedCounts = { ...formData };
-    const productAvailable = productData.find((item) => item.id === product.id);
+    const productAvailable = productData.find((item) => item._id === product.id);
     if (!productAvailable) {
       alert("Product not found");
       return;
     }
-
     const currentCount = updatedCounts[product.id] || 0;
     const newCount = currentCount + 1;
-
     if (newCount > 10) {
       alert("You can't add more than 10 items");
       return;
     }
-
     if (newCount > productAvailable.productCount) {
-      alert(
-        `Only ${productAvailable.productCount} items are available. Do you want to book it?`
-      );
+      alert(`Only ${productAvailable.productCount} items are available. Do you want to book it?`);
       return;
     }
-
     updatedCounts[product.id] = newCount;
     setFormData(updatedCounts);
-
-    const updatedCart = cartItem.map((item) =>
-      item.id === product.id ? { ...item, productCount: newCount } : item
-    );
-
-    await dispatch(cartItems(updatedCart, currentUser?.uid));
-    await dispatch(getCartItem(currentUser?.uid));
+    const updatedCart = cartItem.map((item) =>item.id === product.id ? { ...item, productCount: newCount } : item);
+    await dispatch(cartItems(updatedCart, currentUser?._id));
+    await dispatch(getCartItem(currentUser?._id));
   };
 
   const customStyles = {
@@ -164,7 +147,7 @@ const Cart = () => {
                       </p>
                     )}
                     {cartItem?.map((item) => {
-                      // console.log(item)
+                      
                       const productCountAvailable = productData?.find(
                         (ite) => ite.id === item.id
                       );
@@ -205,7 +188,6 @@ const Cart = () => {
                                   )} */}
                                 </div>
                               </div>
-
                               <div className="col">
                                 <Link
                                   className="text-decoration-none"
@@ -213,7 +195,6 @@ const Cart = () => {
                                 >
                                   {item.productName}
                                 </Link>
-
                                 <p className="small text-muted">
                                   {item.productSize && (
                                     <span>Size: {item.productSize}</span>
@@ -262,11 +243,11 @@ const Cart = () => {
                               </td>
                               <td>
                                 <var className="price">
-                                  ${item.productPrice * item.productCount}
+                                  ${item.totalPrice * item.productCount}
                                 </var>
                                 <div></div>
                                 <small className="text-muted">
-                                  {` $${item.productPrice} each `}
+                                  {` $${item.totalPrice} each `}
                                 </small>
                               </td>
                             </>

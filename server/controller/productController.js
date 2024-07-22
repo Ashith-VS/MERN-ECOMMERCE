@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { productDataModel, CartItemModel, } = require("../model/ProductModel");
+const { productDataModel, CartItemModel, wishlistModel, orderModel, } = require("../model/ProductModel");
 
 const addProduct = async (req, res) => {
     try {
@@ -46,10 +46,9 @@ const singleProductList = async (req, res) => {
 const addToCart = async (req, res) => {
     try {
         const { userId, item } = req.body;
-        // Find the cart for the given userId
         const existingCart = await CartItemModel.findOne({ userId });
         if (existingCart) {
-            existingCart.cartItems.push(...item);
+            existingCart.cartItems=item
             await existingCart.save();
         } else {
             const cartItem = new CartItemModel({
@@ -64,7 +63,6 @@ const addToCart = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-
 
 const getCartItems = async (req, res) => {
     try {
@@ -83,13 +81,13 @@ const getCartItems = async (req, res) => {
 const removeCartItems = async (req, res) => {
     try {
         const { userId, itemId } = req.body
-         // Convert itemId to ObjectId
-         const itemObjectId = new mongoose.Types.ObjectId(itemId);
+        // Convert itemId to ObjectId
+        const itemObjectId = new mongoose.Types.ObjectId(itemId);
         const cart = await CartItemModel.findOne({ userId });
         if (cart) {
-            const updatedCartItems = cart.cartItems.filter(cartItem =>{
+            const updatedCartItems = cart.cartItems.filter(cartItem => {
                 return !cartItem?._id.equals(itemObjectId)
-            } );
+            });
             cart.cartItems = updatedCartItems;
             await cart.save();
             res.status(200).json({ status: 200, message: "Product removed successfully" });
@@ -102,11 +100,21 @@ const removeCartItems = async (req, res) => {
     }
 }
 
-const addToWishlist = async(req, res) => {
+const addToWishlist = async (req, res) => {
     try {
-        console.log('req66: ', req.body);
-        const {userId,item} = req.body
-        const wishlist = await 
+        const { userId, item } = req.body
+        let wishlist = await wishlistModel.findOne({ userId })
+        if (wishlist) {
+             // Check if the item already exists in the wishlist
+             wishlist.wishlistItems = item;
+             await wishlist.save();
+        } else {
+            const wishlists = new wishlistModel({
+                userId,
+                wishlistItems: item
+            });
+            await wishlists.save();
+        }
         res.status(200).json({ status: 200, message: 'product added to wishlist successfully' })
     } catch (error) {
         console.error(error)
@@ -114,5 +122,51 @@ const addToWishlist = async(req, res) => {
     }
 }
 
+const getWishlistItems = async (req, res) => {
+    try {
+        const { id } = req.params
+        const wishlistItems = await wishlistModel.findOne({ userId: id });
+        if (!wishlistItems) {
+            return res.status(404).json({ status: 404, message: 'Wishlist items not found' });
+        }
+        res.status(200).json({ status: 200, message: 'Get wishlist items successfully', data: wishlistItems })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: error.message })
+    }
+}
 
-module.exports = { addProduct, allProductList, singleProductList, addToCart, getCartItems, removeCartItems, addToWishlist };
+
+const addToOrders= async (req, res) => {
+    try {
+        const { userId, item,formData } = req.body;
+        console.log('item: ', item);
+        console.log('req.body55: ', req.body);
+        const newOrder = new orderModel({
+            userId,
+            orderItems: item,
+            userData: formData,
+        });
+        await newOrder.save();
+        res.status(200).json({ status: 200, message: 'Order placed successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const getOrders = async (req, res) => {
+    try {
+        const { id } = req.params
+        console.log('req.params: ', req.params);
+        console.log('id65: ', id);
+        const orders = await orderModel.find({ userId: id });
+        res.status(200).json({ status: 200, orders });
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
+module.exports = { addProduct, allProductList, singleProductList, addToCart, getCartItems, removeCartItems, addToWishlist, getWishlistItems,addToOrders,getOrders};

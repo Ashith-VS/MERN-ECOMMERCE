@@ -4,13 +4,9 @@ import json from "../../../../client/src/constants/data.json";
 import img from "../../assets/images/payment/cards.webp";
 import { isEmpty } from "lodash";
 import { useNavigate } from "react-router-dom";
-import {
-  OrderCollection,
-  cartItems,
-  getCartItem,
-} from "../../redux/action/commonAction";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../../services/firebase";
+import {OrderCollection,cartItems,getCartItem} from "../../redux/action/commonAction";
+// import { doc, setDoc } from "firebase/firestore";
+// import { db } from "../../services/firebase";
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,7 +16,7 @@ const Checkout = () => {
   const { currentUser } = useSelector((state) => state.authReducer);
 
   const totalprice = cartItem.reduce((total, item, i) => {
-    const productprice = item.productPrice * item.productCount;
+    const productprice = item.totalPrice * item.productCount;
     return total + productprice;
   }, 0);
 
@@ -92,7 +88,6 @@ const Checkout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const valid = handleValidation();
-    // const valid = true;
     setError(valid);
     if (isEmpty(valid)) {
       console.log(formData, "handleSubmit");
@@ -101,49 +96,39 @@ const Checkout = () => {
         cartItem.map(async (item) => {
           try {     
             const product = productData.find((prod) => prod.id === item.id);
-
             if (product) {
-              const filtered = product?.productData?.filter(
-                (data) => data.size === item.productSize && data.color === item.productColor
-              );
+              const filtered = product?.productData?.filter((data) => data.size === item.productSize && data.color === item.productColor);
               // console.log(filtered);
               // Calculate the new quantities for each filtered item
-              const updatedQuantities = filtered?.map((data) => ({
-                ...data,
-                quantity: data.quantity - item.productCount,
-              }));
+              const updatedQuantities = filtered?.map((data) => ({...data,quantity: data.quantity - item.productCount}));
               console.log(updatedQuantities)
               // Update the main product's productCount
-              const updatedProductCount =
-                product.productCount - item.productCount;
+              const updatedProductCount = product.productCount - item.productCount;
               // Update the Firestore document
-              const productDocRef = doc(db, "product", item.id);
+              // const productDocRef = doc(db, "product", item.id);
               // Create the updated product data by merging the updated quantities back into the productData array
               const updatedProductData = product.productData.map((data) => {
-                const updatedItem = updatedQuantities.find(
-                  (updated) =>
-                    updated.size === data.size && updated.color === data.color
-                );
+                const updatedItem = updatedQuantities.find((updated) =>updated.size === data.size && updated.color === data.color);
                 return updatedItem ? updatedItem : data;
               });
 
-              await setDoc(
-                productDocRef,
-                {
-                  productCount: updatedProductCount,
-                  productData: updatedProductData,
-                },
-                { merge: true }
-              );
+              // await setDoc(
+              //   productDocRef,
+              //   {
+              //     productCount: updatedProductCount,
+              //     productData: updatedProductData,
+              //   },
+              //   { merge: true }
+              // );
             }
           } catch (error) {
             console.error("Error updating product count:", error);
           }
         })
       );
-      await dispatch(OrderCollection(formData, cartItem, currentUser?.uid));
-      await dispatch(cartItems([], currentUser?.uid));
-      await dispatch(getCartItem(currentUser?.uid));
+      await dispatch(OrderCollection(formData, cartItem, currentUser?._id));
+      // await dispatch(cartItems([], currentUser?._id));
+      // await dispatch(getCartItem(currentUser?._id));
       navigate("/orders");
     }
   };
@@ -412,12 +397,11 @@ const Checkout = () => {
                         </small>
                       </div>
                       <span className="text-muted">
-                        ${item.productPrice * item.productCount}
+                        ${item.totalPrice * item.productCount}
                       </span>
                     </li>
                   );
                 })}
-
                 <li className="list-group-item d-flex justify-content-between">
                   <span>Total (USD)</span>
                   <strong>{`$${totalprice}`}</strong>

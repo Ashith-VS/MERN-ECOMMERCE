@@ -10,7 +10,7 @@ const Invoice = () => {
   const { allPreviousCollection } = useSelector((state) => state.commonReducer);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(GetOrderCollection(currentUser?.uid));
+    dispatch(GetOrderCollection(currentUser?._id));
   }, []);
  
 const order =[]

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 const Deals = () => {
   const { productData } = useSelector((state) => state.commonReducer);
   const AvailableProduct = productData?.filter((item) => item.productCount !== 0);
-  // console.log('AvailableProduct: ', AvailableProduct);
+
 
   return (
     <div className="container-fluid bg-light mb-3">

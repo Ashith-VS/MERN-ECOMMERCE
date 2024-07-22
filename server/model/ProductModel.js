@@ -84,8 +84,123 @@ const cartItemSchema = new mongoose.Schema({
     }
   }]
 })
+
+const wishlistSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
+  wishlistItems: [{
+    id: {
+      type: String,
+      required: true,
+    },
+    productName: {
+      type: String,
+      required: true
+    },
+    productDescription: {
+      type: String,
+      required: true
+    },
+    productImage: {
+      type: String,
+      required: true
+    },
+    productCount: {
+      type: Number,
+      required: true,
+    },
+    productColor: {
+      type: String,
+      required: true,
+    },
+    productSize: {
+      type: String,
+      required: true
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+    }
+  }]
+})
+
+const orderSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
+  orderItems: [{
+    id: {
+      type: String,
+      required: true,
+    },
+    productName: {
+      type: String,
+      required: true
+    },
+    productImage: {
+      type: String,
+      required: true
+    },
+    productDescription: {
+      type: String,
+      required: true
+    },
+    productCount: {
+      type: Number,
+      required: true,
+    },
+    productColor: {
+      type: String,
+      required: true,
+    },
+    productSize: {
+      type: String,
+      required: true
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+    }
+  }],
+    userData: {
+      name: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      mobile: {
+        type: String,
+        required: true,
+      },
+      address1: {
+        type: String,
+        required: true,
+      },
+      paymentMethod: {
+        type: String,
+        default:"credit card",
+      },
+      orderStatus: {
+        type: String,
+        default: 'pending',
+      },
+      orderDate: {
+        type: Date,
+        default: Date.now,
+      },
+    }
+  
+})
 // Create a model from the schema
 const productDataModel = mongoose.model('Product', ProductSchema)
 const CartItemModel = mongoose.model('cartItem', cartItemSchema)
+const wishlistModel = mongoose.model('wishlist', wishlistSchema)
+const orderModel = mongoose.model('order', orderSchema)
 
-module.exports = { productDataModel, CartItemModel }
+module.exports = { productDataModel, CartItemModel, wishlistModel, orderModel }

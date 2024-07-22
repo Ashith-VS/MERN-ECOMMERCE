@@ -8,17 +8,18 @@ const Orders = () => {
   const { allPreviousCollection } = useSelector((state) => state.commonReducer);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(GetOrderCollection(currentUser?.uid));
+    dispatch(GetOrderCollection(currentUser?._id));
   }, []);
-  // console.log(allPreviousCollection)
+  // console.log(allPreviousCollection);
 
   return (
     <div className="container mb-3">
       <h4 className="my-3">Orders</h4>
       <div className="row g-3">
-        {allPreviousCollection?.map((items) =>
-          items.item?.map((item, i) => {
+        {allPreviousCollection.map((items) =>
+          items?.orderItems?.map((item, i) => {
             return (
               <div className="col-md-6" key={i}>
                 <div className="card">
@@ -56,7 +57,7 @@ const Orders = () => {
                             </>
                           )}
                           <span className="text-muted me-2">Price:</span>
-                          <span className="me-3">{`$${item?.productPrice}`}</span>
+                          <span className="me-3">{`$${item?.totalPrice}`}</span>
                           {item?.productColor && (
                             <>
                               ( <span className="text-muted me-2">Color:</span>
@@ -79,7 +80,7 @@ const Orders = () => {
                           {console.log(item.id)}
                           <span className="me-2">Invoice:</span>
                           <span className="text-success">
-                            <Link to={`/invoice/${item?.uid}`}>
+                            <Link to={`/invoice/${item?.id}`}>
                               <i className="bi bi-receipt-cutoff me-1" />
                               Download
                             </Link>

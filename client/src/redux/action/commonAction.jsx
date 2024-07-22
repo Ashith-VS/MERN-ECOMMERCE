@@ -1,23 +1,4 @@
-import {
-  LOADER_ACTION,
-  CART_ITEMS,
-  FORM_DATA,
-  ADD_TO_WISHLIST,
-  RESET_FORM_DATA,
-  ORDER_COLLECTION,
-  GET_PRODUCT_DATA,
-  SET_FILTERED_DATA,
-  GET_ORDER_COLLECTION,
-  GET_CART_ITEMS,
-  GET_TO_WISHLIST,
-  SET_CATEGORY_DATA,
-  GET_USER_DATA,
-  USER_DELETED,
-  DELETE_PRODUCT_DATA,
-  ADD_PRODUCT_DATA,
-  UPDATE_PRODUCT_DATA,
-  DELETE_CART_ITEM,
-} from "../../../../client/src/constants/constants";
+import {LOADER_ACTION,CART_ITEMS,FORM_DATA,ADD_TO_WISHLIST,RESET_FORM_DATA,ORDER_COLLECTION,GET_PRODUCT_DATA,SET_FILTERED_DATA,GET_ORDER_COLLECTION,GET_CART_ITEMS,GET_TO_WISHLIST,SET_CATEGORY_DATA,GET_USER_DATA,USER_DELETED,DELETE_PRODUCT_DATA,ADD_PRODUCT_DATA,UPDATE_PRODUCT_DATA,DELETE_CART_ITEM} from "../../../../client/src/constants/constants";
 import { format } from "date-fns";
 import fetchData from "../../../../client/src/http/api";
 
@@ -86,6 +67,7 @@ export const setFilteredData = (id) => {
 };
 
 export const cartItems = (response, currentUser) => {
+  console.log('response: ', response);
   return async (dispatch) => {
     dispatch(showLoader(true));
     try {
@@ -137,15 +119,13 @@ export const deleteCartItem=(itemId,userId)=>{
 }
 
 export const AddWishList = (response, currentUser) => {
-  console.log('currentUser: ', currentUser);
-  console.log('response: ', response);
+ 
   return async (dispatch) => {
     try {
       const res = await fetchData("/addwishlist", "post", {
         userId: currentUser,
         item: response,
       });
-      console.log('res: ', res);
       dispatch({
         type: ADD_TO_WISHLIST,
         payload: res,
@@ -157,21 +137,12 @@ export const AddWishList = (response, currentUser) => {
 };
 
 export const GetWishlist = (currentUser) => {
-  // localStorage.setItem("addtowishList", JSON.stringify(response));
   return async (dispatch) => {
     try {
-      const res = await fetchData("/wishlist", "POST", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          userId: currentUser,
-        },
-      });
-      // console.log(res?.wishlist[0].item);
+      const res = await fetchData(`/wishlist/${currentUser}`, "get");
       dispatch({
         type: GET_TO_WISHLIST,
-        payload: res?.wishlist[0]?.item,
+        payload: res?.data?.wishlistItems,
       });
     } catch (error) {
       console.error(error);
@@ -192,16 +163,11 @@ export const OrderCollection = (formData, cartItem, currentUser) => {
   const updatedFormData = { ...formData, uid: id, date: date };
   return async (dispatch) => {
     try {
-      const res = await fetchData("/addToOrders", "post", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
+      const res = await fetchData("/addOrders", "post", {
           userId: currentUser,
           item: cartItems,
           formData: updatedFormData,
           id: id,
-        },
       });
       console.log(res);
       dispatch({
@@ -218,15 +184,7 @@ export const GetOrderCollection = (currentUser) => {
   return async (dispatch) => {
     dispatch(showLoader(true));
     try {
-      const res = await fetchData("/allOrders", "post", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          userId: currentUser,
-        },
-      });
-      // console.log(res?.orders);
+      const res = await fetchData(`/order/${currentUser}`, "get");
       dispatch({
         type: GET_ORDER_COLLECTION,
         payload: res?.orders,

@@ -25,7 +25,7 @@ const mongoose = require('mongoose')
         },
       }, {
         timestamps: true,
-      })
+      },)
 
       const UserData = mongoose.model('user',UserSchema)
       module.exports = UserData

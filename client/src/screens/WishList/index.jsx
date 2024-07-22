@@ -8,10 +8,12 @@ const WishList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cartItem, wishList } = useSelector((state) => state.commonReducer);
+  console.log('wishList: ', wishList);
   const { currentUser } = useSelector((state) => state.authReducer);
+  console.log('currentUser: ', currentUser);
 
   useEffect(() => {
-    dispatch(GetWishlist(currentUser?.uid));
+    dispatch(GetWishlist(currentUser?._id));
   }, []);
 
   const handleAddToCart = async(product) => {

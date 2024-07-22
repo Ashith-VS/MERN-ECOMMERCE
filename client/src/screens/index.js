@@ -9,9 +9,9 @@ import Category from "./Category";
 import Profile from "./Profile";
 import Cart from "./Cart";
 import WishList from "./WishList";
+import Checkout from "./Checkout";
 import Orders from "./Orders";
-// import Checkout from "./Checkout";
-// import Invoice from "./Invoice";
+import Invoice from "./Invoice";
 // import Users from "./Users";
 import Notification from "./Notification";
 import Support from "./Support";
@@ -29,9 +29,9 @@ export {
   Profile,
   Cart,
   WishList,
+  Checkout,
   Orders,
-  // Checkout,
-  // Invoice,
+  Invoice,
   // Users,
   Notification,
   Support,

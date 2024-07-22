@@ -25,25 +25,18 @@ const ProductDetail = () => {
   //   dispatch(getCartItem(currentUser?.uid));
   // }, []);
 
-  // console.log(cartItem);
-
-  // console.log(formData, "formData");
   useEffect(() => {
     dispatch(setFilteredData(id));
   }, [id]);
 
   const handleAddToWishlist = async () => {
-    const productExists = wishList.find(
-      (product) => product.id === filteredData?.id
-    );
+    const productExists = wishList.find((product) => product.id === filteredData?.id);
     if (productExists) {
-      const updatedWishlist = wishList.filter(
-        (product) => product.id !== filteredData?.id
-      );
-      await dispatch(AddWishList(updatedWishlist, currentUser.uid));
-      await dispatch(GetWishlist(currentUser?.uid));
+      const updatedWishlist = wishList.filter((product) => product.id !== filteredData?.id);
+      await dispatch(AddWishList(updatedWishlist, currentUser._id));
+      await dispatch(GetWishlist(currentUser?._id));
     } else {
-      if (currentUser?.uid) {
+      if (currentUser?._id) {
         const newWishlistItem = {
           id: filteredData?.id,
           productName: filteredData?.productName,
@@ -56,7 +49,7 @@ const ProductDetail = () => {
           totalPrice: filteredData?.productPrice * formData?.productCount,
         };
         await dispatch(AddWishList([...wishList, newWishlistItem], currentUser?.uid));
-        await dispatch(GetWishlist(currentUser?.uid));
+        await dispatch(GetWishlist(currentUser?._id));
       } else {
         alert("Please login to use Add to Wishlist");
       }
@@ -138,7 +131,6 @@ const ProductDetail = () => {
   //         productSize: filteredData.productSize[0],
   //       }));
   //     }
-
   //   }
   // }, [filteredData]);
 
@@ -304,7 +296,6 @@ const ProductDetail = () => {
                           : "Add to cart"}
                       </button>
                     )}
-
                     <button
                       type="button"
                       className={`btn btn-sm ${
