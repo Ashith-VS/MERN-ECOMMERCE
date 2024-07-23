@@ -1,36 +1,43 @@
-
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { GetOrderCollection } from "../../redux/action/commonAction";
+import { format } from "date-fns";
 
 const Invoice = () => {
   const { currentUser } = useSelector((state) => state.authReducer);
   const { id } = useParams();
   const { allPreviousCollection } = useSelector((state) => state.commonReducer);
+  console.log("allPreviousCollection: ", allPreviousCollection[0].userData);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetOrderCollection(currentUser?._id));
   }, []);
- 
-const order =[]
-const user=[]
- allPreviousCollection?.forEach((item) =>{
-    order?.push(item?.item);
-    user?.push(item?.formData);
-  })
 
-const orders=order.flat()
+  const order = [];
+  const user = [];
+  allPreviousCollection?.forEach((item) => {
+    order?.push(item?.orderItems);
+    user?.push(item?.userData);
+    console.log('item?.userData: ', item?.userData);
+  });
+  console.log('user88: ', user);
 
+  const orders = order.flat();
 
-  const filteredResult = orders?.filter((item) =>item?.uid===id);
-  const filteredUser = Object.values(user)?.filter(
-    (item) => item?.uid === id
-  );
- 
+  const filteredResult = orders?.filter((item) => item.id === id);
+
+  // const filteredUser = Object.values(user)?.filter((item) => item?.id === id);
+  // console.log("filteredUser: ", filteredUser);
+  const filteredUser=user
+  console.log('filteredUser: ', filteredUser);
+
   const totalPrice = filteredResult.reduce((total, item, i) => {
-    return total + item.productPrice * item.productCount;
+    return total + item.totalPrice * item.productCount;
   }, 0);
+
+  const date = format(filteredUser[0]?.orderDate, "dd/MM/yyyy");
+  
 
   return (
     <div className="container-fluid bg-secondary p-3">
@@ -56,7 +63,8 @@ const orders=order.flat()
           </div>
           <div className="row mb-3 pb-3 border-bottom">
             <div className="col-6">
-              <b className="me-1">Invoice Date:</b> {filteredUser[0]?.date}
+              <b className="me-1">Invoice Date:</b> {date}
+              
             </div>
             <div className="col-6 d-flex justify-content-end">
               <b className="me-1">Invoice No:</b> #1234567890
@@ -80,7 +88,7 @@ const orders=order.flat()
               <address>
                 <strong> {filteredUser[0]?.name}</strong>
                 <br />
-                {filteredUser[0]?.address21}
+                {filteredUser[0]?.address1}
                 <br />
                 {filteredUser[0]?.address22}
                 <br />
@@ -119,12 +127,12 @@ const orders=order.flat()
                           <td className="col-4 text-1">
                             {item.productDescription}
                           </td>
-                          <td className="col-2 text-center">{`$${item.productPrice}`}</td>
+                          <td className="col-2 text-center">{`$${item.totalPrice}`}</td>
                           <td className="col-1 text-center">
                             {item.productCount}
                           </td>
                           <td className="col-2 text-end">{`$${
-                            item.productPrice * item.productCount
+                            item.totalPrice * item.productCount
                           }`}</td>
                         </tr>
                       </tbody>

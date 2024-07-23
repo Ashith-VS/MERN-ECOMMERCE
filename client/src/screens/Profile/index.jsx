@@ -46,7 +46,7 @@ const Profile = () => {
     console.log(formData, "formData");
     const valid = validPassword();
     if (isEmpty(valid)) {
-      updateUserPassword();
+      // updateUserPassword();
     }
   };
   const validPassword = () => {

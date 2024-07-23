@@ -127,8 +127,8 @@ const Checkout = () => {
         })
       );
       await dispatch(OrderCollection(formData, cartItem, currentUser?._id));
-      // await dispatch(cartItems([], currentUser?._id));
-      // await dispatch(getCartItem(currentUser?._id));
+      await dispatch(cartItems([], currentUser?._id));
+      await dispatch(getCartItem(currentUser?._id));
       navigate("/orders");
     }
   };

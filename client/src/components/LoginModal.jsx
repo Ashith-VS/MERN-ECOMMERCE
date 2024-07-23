@@ -13,7 +13,10 @@ const navigate=useNavigate()
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={() => navigate("/signin")}>
+        <Button variant="primary" onClick={() =>{ 
+          handleClose()  // Close the modal when login button is clicked
+          navigate("/signin")
+          }}>
           Login
         </Button>
       </Modal.Footer>
