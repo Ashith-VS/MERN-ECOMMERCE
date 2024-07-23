@@ -4,7 +4,7 @@ const UserData = require("../model/User");
 
 const registerUser = async(req,res)=>{
     try {
-        console.log('req: ', req.body);
+        // console.log('req: ', req.body);
         const {name,email,mobile,password} =req.body;
         // Hash the password
        const hashedPassword = await bcrypt.hash(password, 10); 
@@ -37,7 +37,7 @@ const loginUser =async(req,res)=>{
       }
       // Generate a JWT token for the authenticated user
       const token = jwt.sign({ id: user._id, name:user.name,email:user.email,role:user.role,mobile:user.mobile }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      console.log('token: ', token);
+    //   console.log('token: ', token);
     // Send the JWT token as a response to the client
      res.status(200).json({status:200,message:"User logged in successfully",token: token})
     } catch (error) {
@@ -74,9 +74,9 @@ const googleLogin = async(req, res) => {
 
 const currentUser = async(req,res)=>{
 try {
-    console.log(req.userId,"PPPPP")
+    // console.log(req.userId,"PPPPP")
     const user = await UserData.findById(req.userId).select('-password'); //remove password from user
-    console.log('user: ', user);
+    // console.log('user: ', user);
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
     }

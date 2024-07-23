@@ -35,7 +35,7 @@ const authReducer = (state = initialState, action) => {
         AuthFailure: action.payload,
       };
       case AUTH_LOGIN_SUCCESS:
-      console.log('action.payload: ', action.payload);
+      // console.log('action.payload: ', action.payload);
       return {
         ...state,
         authenticated: true,
@@ -45,7 +45,7 @@ const authReducer = (state = initialState, action) => {
          // currentUser: localStorage.setItem("currentUser",JSON.stringify(action.payload.user)),
       };
     case AUTH_LOGIN_FAILURE:
-      console.log('action.payload: ', action.payload);
+      // console.log('action.payload: ', action.payload);
       return {
         ...state,
         authenticated: false,
@@ -53,7 +53,7 @@ const authReducer = (state = initialState, action) => {
       };   
    
     case CURRENT_USER_DATA:
-      console.log('action.payload: ', action.payload);
+      // console.log('action.payload: ', action.payload);
       return {
         ...state,
         currentUser: action.payload,

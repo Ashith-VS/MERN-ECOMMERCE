@@ -67,7 +67,6 @@ export const setFilteredData = (id) => {
 };
 
 export const cartItems = (response, currentUser) => {
-  console.log('response: ', response);
   return async (dispatch) => {
     dispatch(showLoader(true));
     try {
@@ -75,7 +74,6 @@ export const cartItems = (response, currentUser) => {
           userId: currentUser,
           item: response,
       });
-      console.log(res);
       dispatch({
         type: CART_ITEMS,
         payload: res,
@@ -119,7 +117,6 @@ export const deleteCartItem=(itemId,userId)=>{
 }
 
 export const AddWishList = (response, currentUser) => {
- 
   return async (dispatch) => {
     try {
       const res = await fetchData("/addwishlist", "post", {
@@ -158,7 +155,7 @@ export const OrderCollection = (formData, cartItem, currentUser) => {
     ...item,
     uid: id,
   }));
-  console.log(cartItems);
+  // console.log(cartItems);
   // Add uid to formData
   const updatedFormData = { ...formData, uid: id, date: date };
   return async (dispatch) => {
@@ -167,9 +164,9 @@ export const OrderCollection = (formData, cartItem, currentUser) => {
           userId: currentUser,
           item: cartItems,
           formData: updatedFormData,
-          id: id,
+          uid: id,
       });
-      console.log(res);
+      // console.log(res);
       dispatch({
         type: ORDER_COLLECTION,
         payload: { cartItems, formData },
@@ -202,7 +199,6 @@ export const GetUserData = () => {
     dispatch(showLoader(true));
     try {
       const res = await fetchData("/user", "get");
-      // console.log(res?.users);
       dispatch({
         type: GET_USER_DATA,
         payload: res?.users,
@@ -265,16 +261,13 @@ export const deleteProductData = (id) => {
 
 
 export const updateProductData = (id, product) => {
+  // console.log('product444: ', product);
+  // console.log('id77: ', id);
   return async (dispatch) => {
     try {
-      const res = await fetchData("/updateProduct", "post", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          id: id,
-          product: product,
-        },
+      const res = await fetchData(`/updateproduct/${id}`, "post", {
+          id,
+          product,
       });
       // console.log(res)
       dispatch({

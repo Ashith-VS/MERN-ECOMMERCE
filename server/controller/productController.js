@@ -25,7 +25,7 @@ const addProduct = async (req, res) => {
 const allProductList = async (req, res) => {
     try {
         const products = await productDataModel.find();
-        console.log('products: ', products);
+        // console.log('products: ', products);
         res.status(200).json({ status: 200, products });
     } catch (error) {
         console.error(error)
@@ -48,7 +48,7 @@ const addToCart = async (req, res) => {
         const { userId, item } = req.body;
         const existingCart = await CartItemModel.findOne({ userId });
         if (existingCart) {
-            existingCart.cartItems=item
+            existingCart.cartItems = item
             await existingCart.save();
         } else {
             const cartItem = new CartItemModel({
@@ -105,9 +105,8 @@ const addToWishlist = async (req, res) => {
         const { userId, item } = req.body
         let wishlist = await wishlistModel.findOne({ userId })
         if (wishlist) {
-             // Check if the item already exists in the wishlist
-             wishlist.wishlistItems = item;
-             await wishlist.save();
+            wishlist.wishlistItems = item;
+            await wishlist.save();
         } else {
             const wishlists = new wishlistModel({
                 userId,
@@ -137,15 +136,14 @@ const getWishlistItems = async (req, res) => {
 }
 
 
-const addToOrders= async (req, res) => {
+const addToOrders = async (req, res) => {
     try {
-        const { userId, item,formData } = req.body;
-        console.log('item: ', item);
-        console.log('req.body55: ', req.body);
+        const { userId, item, formData, uid } = req.body;
         const newOrder = new orderModel({
             userId,
             orderItems: item,
             userData: formData,
+            uid: uid
         });
         await newOrder.save();
         res.status(200).json({ status: 200, message: 'Order placed successfully' });
@@ -158,8 +156,6 @@ const addToOrders= async (req, res) => {
 const getOrders = async (req, res) => {
     try {
         const { id } = req.params
-        console.log('req.params: ', req.params);
-        console.log('id65: ', id);
         const orders = await orderModel.find({ userId: id });
         res.status(200).json({ status: 200, orders });
     } catch (error) {
@@ -168,5 +164,35 @@ const getOrders = async (req, res) => {
     }
 }
 
+const updateProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { product } = req.body;
+        // console.log('req.body: ', product);
 
-module.exports = { addProduct, allProductList, singleProductList, addToCart, getCartItems, removeCartItems, addToWishlist, getWishlistItems,addToOrders,getOrders};
+        // Ensure id is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ status: 400, message: 'Invalid ID format' });
+        }
+
+        // Update the document
+        const updatedProduct = await productDataModel.findByIdAndUpdate(
+            id,
+            { $set: { productData: product } }, 
+            { new: true, runValidators: true } 
+        );
+        // console.log('updatedProduct: ', updatedProduct);
+
+        if (!updatedProduct) {
+            return res.status(404).json({ status: 404, message: 'Product not found' });
+        }
+        res.status(200).json({ status: 200, message: 'Product updated successfully', data: updatedProduct });
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+
+module.exports = { addProduct, allProductList, singleProductList, addToCart, getCartItems, removeCartItems, addToWishlist, getWishlistItems, addToOrders, getOrders, updateProduct };

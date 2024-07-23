@@ -14,6 +14,7 @@ const Category = () => {
     size: [],
     color: [],
   });
+  
   const [sortOrder, setSortOrder] = useState("");
   const [viewMode, setViewMode] = useState("list");
 

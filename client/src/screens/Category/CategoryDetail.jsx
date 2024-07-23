@@ -25,45 +25,55 @@ const CategoryDetail = ({ viewMode }) => {
   }, [id]);
 
   const handleAddToCart = async (product) => {
-    const productExists = cartItem?.find((item) => item.id === product.id);
-    const productCountupdate = {
-      ...product,
+    const productExists = cartItem?.find((item) => item.id === product._id);
+    const newProductItem = {
+      id: product?._id,
+      productName: product?.productName,
+      productDescription: product?.productDescription,
+      productImage: product?.productImage,
+      productPrice: product?.productPrice,
       productCount: 1,
-      productSize: product?.productSize[0] || null,
-      productColor: product?.productColor[0] || null,
+      productColor: product?.productData[0].color,
+      productSize: product?.productData[0].size,
+      totalPrice: product?.productPrice ,
     };
-
     if (productExists) {
       // alert("The product already added to cart");
       return;
     } else {
-      await dispatch(
-        cartItems([...cartItem, productCountupdate], currentUser?._id)
-      );
+      await dispatch(cartItems([...cartItem, newProductItem], currentUser?._id));
       await dispatch(getCartItem(currentUser?._id));
     }
   };
 
   const handleAddToWishlist = async (item) => {
-    // console.log('item: ', item);
-    const productExists = wishList?.find((product) => product.id === item.id);
-    console.log('productExists: ', productExists);
-    const updatedWishlist = wishList?.filter((product) => product.id !== item.id);
+    const productExists = wishList?.find((product) => product?.id === item?._id);
+    const updatedWishlist = wishList?.filter((product) => product.id !== item._id);
     if (productExists) {
       await dispatch(AddWishList(updatedWishlist, currentUser?._id));
-      await dispatch(GetWishlist(currentUser?._id));
     } else {
-      await dispatch(AddWishList([...wishList, item], currentUser?._id));
-      await dispatch(GetWishlist(currentUser?._id));
+      const newWishlistItem = {
+        id: item?._id,
+        productName: item?.productName,
+        productDescription: item?.productDescription,
+        productImage: item?.productImage,
+        productPrice: item?.productPrice,
+        productCount: item?.productData[0].quantity,
+        productColor: item?.productData[0].color,
+        productSize: item?.productData[0].size,
+        totalPrice: item?.productPrice ,
+      };
+      await dispatch(AddWishList([...wishList, newWishlistItem], currentUser?._id));
     }
+    await dispatch(GetWishlist(currentUser?._id));
   };
 
   return (
     <div className="row g-3">
       {categoryData?.map((item) => (
         <div
-          key={item.id}
-          className={viewMode === "grid" ? "col-md-4" : "col-md-12"}
+        key={item._id}
+        className={viewMode === "grid" ? "col-md-4" : "col-md-12"}
         >
           <div className="card">
             <div className="row g-0">
@@ -84,7 +94,7 @@ const CategoryDetail = ({ viewMode }) => {
                   <h6 className="card-subtitle me-2 d-inline">
                     <Link
                       className="text-decoration-none"
-                      to={`/product/${item.id}`}
+                      to={`/product/${item._id}`}
                     >
                       {item.productName}
                     </Link>
@@ -120,14 +130,14 @@ const CategoryDetail = ({ viewMode }) => {
                         type="button"
                         className="btn btn-sm btn-primary"
                         title="Add to cart"
-                        onClick={() => navigate(`/admin/${item.id}`)}
+                        onClick={() => navigate(`/admin/${item._id}`)}
                       >
                         Edit
                       </button>
                     ) : (
                       <>
                         {cartItem?.find(
-                          (cartitem) => cartitem.id === item.id
+                          (cartitem) => cartitem.id === item._id
                         ) ? (
                           <button
                             type="button"
@@ -150,7 +160,7 @@ const CategoryDetail = ({ viewMode }) => {
                         <button
                           type="button"
                           className={`btn btn-sm ${
-                            wishList.some((product) => product.id === item.id)
+                            wishList.some((product) => product.id === item._id)
                               ? "btn-outline-danger"
                               : "btn-outline-secondary"
                           } me-2`}

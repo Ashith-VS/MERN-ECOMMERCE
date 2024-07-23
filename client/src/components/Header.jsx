@@ -11,22 +11,20 @@ import fetchData from "../http/api";
 import { CurrentUserAuth } from "../redux/action/authAction";
 import { googleLogout } from "@react-oauth/google";
 import LoginModal from "./LoginModal";
+import { getCartItem, GetWishlist } from "../redux/action/commonAction";
 
 const Header = () => {
 const dispatch = useDispatch();
 const {token,currentUser}=useSelector((state)=>state.authReducer)
-console.log('currentUser: ', currentUser);
 const { cartItem } = useSelector((state) => state.commonReducer);
 const [showModal, setShowModal] = useState(false);
-console.log('showModal: ', showModal);
-// console.log(token)
+
   const getCurrentUser=async()=>{
     try {
       const res=await fetchData("/currentuser","get",null,{
         Authorization: token
       })
       dispatch(CurrentUserAuth(res.user))
-      // console.log(res)
     } catch (error) {
       console.error(error)
     }
@@ -34,6 +32,13 @@ console.log('showModal: ', showModal);
   useEffect(()=>{
     getCurrentUser()
   },[])
+
+  useEffect(() => {
+    if(currentUser?._id){
+    dispatch(getCartItem(currentUser?._id));
+    dispatch(GetWishlist(currentUser?._id));
+    }
+  }, [currentUser?._id]);
 
   const handleLogout = () => {
     googleLogout(); 

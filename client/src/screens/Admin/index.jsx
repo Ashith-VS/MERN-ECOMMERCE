@@ -15,7 +15,7 @@ const Admin = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authReducer);
-  console.log('currentUser: ', currentUser);
+  // console.log('currentUser: ', currentUser);
   const { productData } = useSelector((state) => state.commonReducer);
   // console.log('productData: ', productData);
   const [errors, setErrors] = useState({});
@@ -390,10 +390,10 @@ const Admin = () => {
     e.preventDefault();
     const valid = handleValidation();
     setErrors(valid);
-    console.log(valid);
+    // console.log(valid);
     if (isEmpty(valid)) {
-      console.log(formData, "handleSubmit");
-      console.log(counts, "counts");
+      // console.log(formData, "handleSubmit");
+      // console.log(counts, "counts");
 
       {
         id ? updateProduct() : addProduct();

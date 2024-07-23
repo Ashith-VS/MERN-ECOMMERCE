@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  GetProductData,
-  cartItems,
-  deleteProductData,
-  getCartItem,
-} from "../../redux/action/commonAction";
+import {GetProductData,cartItems,deleteProductData,getCartItem} from "../../redux/action/commonAction";
 import { Link, useNavigate } from "react-router-dom";
 
 const AllProducts = () => {
@@ -14,21 +9,32 @@ const AllProducts = () => {
   const { cartItem, productData } = useSelector((state) => state.commonReducer);
   const { currentUser } = useSelector((state) => state.authReducer);
 
-  // useEffect(() => {
-  //   dispatch(GetProductData());
-  // }, []);
+  useEffect(() => {
+    if (currentUser?._id) {
+      dispatch(GetProductData());
+      dispatch(getCartItem(currentUser._id));
+    }
+  }, [currentUser?._id]);
 
   const handleAddToCart = async (product) => {
-    const productExists = cartItem.find((item) => item.id === product.id);
-    const productCountAvailable = { ...product, productCount: 1 };
+    const productExists = cartItem.find((item) => item.id === product._id);
+    const newProductItem = {
+      id: product?._id,
+      productName: product?.productName,
+      productDescription: product?.productDescription,
+      productImage: product?.productImage,
+      productPrice: product?.productPrice,
+      productCount: 1,
+      productColor: product?.productData[0].color,
+      productSize: product?.productData[0].size,
+      totalPrice: product?.productPrice ,
+    };
     if (productExists) {
-      navigate("/cart");
+      // navigate("/cart");
       return;
     } else {
-      await dispatch(
-        cartItems([...cartItem, productCountAvailable], currentUser?.uid)
-      );
-      await dispatch(getCartItem(currentUser?.uid));
+      await dispatch(cartItems([...cartItem, newProductItem], currentUser?._id));
+      await dispatch(getCartItem(currentUser?._id));
     }
   };
 
@@ -59,7 +65,7 @@ const AllProducts = () => {
           >
            
             <div className="card text-center" style={{ height: "100%" }}>
-            <Link to={`/product/${item.id}`} style={{textDecoration:"none"}}
+            <Link to={`/product/${item._id}`} style={{textDecoration:"none"}}
             >
               <div className="card-body" style={{ height: "100%" }}>
                 <img
@@ -102,7 +108,7 @@ const AllProducts = () => {
                   </>
                 ) : item?.productCount !== 0 ? (
                   <>
-                    {cartItem?.find((cartitem) => cartitem.id === item.id) ? (
+                    {cartItem?.find((cartitem) => cartitem.id === item._id) ? (
                       <button
                         type="button"
                         className="btn btn-sm btn-primary me-2"

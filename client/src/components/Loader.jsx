@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 const Loader = () => {
   const { loading } = useSelector((state) => state.commonReducer);
-  // console.log(loading, "loading");
+
   return (
     <>
       {loading && (

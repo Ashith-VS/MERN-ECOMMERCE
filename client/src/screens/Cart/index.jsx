@@ -8,7 +8,6 @@ import ReactModal from "react-modal";
 const Cart = () => {
   const dispatch = useDispatch();
   const { cartItem, wishList, productData } = useSelector((state) => state.commonReducer);
-  console.log('productData: ', productData);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authReducer);
   const [formData, setFormData] = useState({});
@@ -148,15 +147,14 @@ const Cart = () => {
                     )}
                     {cartItem?.map((item) => {
                       
-                      const productCountAvailable = productData?.find(
-                        (ite) => ite.id === item.id
-                      );
-                      const productAvailable =
-                        productCountAvailable?.productData?.filter(
-                          (opt) =>
-                            opt.size === item.productSize &&
-                            opt.color === item.productColor
-                        );
+                      const productCountAvailable = productData?.find((ite) => ite._id === item.id);
+                    
+                     
+                      const productAvailable =productCountAvailable?.productData?.filter((opt) =>
+                        opt.size === item.productSize &&
+                      opt.color === item.productColor
+                    );
+              
                       const productQuantity = productAvailable?.map(
                         (item) => item.quantity
                       );
@@ -172,14 +170,15 @@ const Cart = () => {
                                   alt="..."
                                 />
                                 <div>
-                                  {productCountAvailable?.productCount < 5 && (
+                                  {/* {productCountAvailable?.productCount < 5 && (
                                     <span
                                       style={{ color: "red", fontSize: "14px" }}
                                     >
                                       {`Only ${productCountAvailable?.productCount} items left`}{" "}
                                     </span>
-                                  )}
-                                  {/* {productQuantity[0]< 5 && (
+                                  )} */}
+                                
+                                  {/* {productQuantity[0]>5 && (
                                     <span
                                       style={{ color: "red", fontSize: "14px" }}
                                     >

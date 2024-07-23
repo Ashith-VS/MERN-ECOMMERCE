@@ -81,9 +81,9 @@ const Login = () => {
   };
   // GOOGLE LOGIN
   const handleGoogleSuccess = (response) => {
-    console.log("Google login success:", response);
+    // console.log("Google login success:", response);
     const user = jwtDecode(response.credential);
-    console.log("Decoded user info: ", user);
+    // console.log("Decoded user info: ", user);
     // Send the Google token to your backend for verification
 dispatch(GoogleLoginUserAuth(user,navigate))
   }
@@ -123,7 +123,7 @@ dispatch(GoogleLoginUserAuth(user,navigate))
             You don't have an account? <Link to={"/signup"}>Register</Link>
           </p>
          
-  <div className="text-center mt-4">
+  {/* <div className="text-center mt-4">
     <GoogleOAuthProvider clientId={clientId}>
       <GoogleLogin
         onSuccess={handleGoogleSuccess}
@@ -132,7 +132,7 @@ dispatch(GoogleLoginUserAuth(user,navigate))
         // auto_select
       />
     </GoogleOAuthProvider>
-</div>
+</div> */}
         </div>
       </div>
     </div>

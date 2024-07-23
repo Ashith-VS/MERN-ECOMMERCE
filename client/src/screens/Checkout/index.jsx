@@ -4,9 +4,8 @@ import json from "../../../../client/src/constants/data.json";
 import img from "../../assets/images/payment/cards.webp";
 import { isEmpty } from "lodash";
 import { useNavigate } from "react-router-dom";
-import {OrderCollection,cartItems,getCartItem} from "../../redux/action/commonAction";
-// import { doc, setDoc } from "firebase/firestore";
-// import { db } from "../../services/firebase";
+import {OrderCollection,cartItems,getCartItem, updateProductData} from "../../redux/action/commonAction";
+
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -90,20 +89,23 @@ const Checkout = () => {
     const valid = handleValidation();
     setError(valid);
     if (isEmpty(valid)) {
-      console.log(formData, "handleSubmit");
+      // console.log(formData, "handleSubmit");
       // Update product count in Firestore
       await Promise.all(
         cartItem.map(async (item) => {
+          // console.log('item: ', item);
           try {     
-            const product = productData.find((prod) => prod.id === item.id);
+            const product = productData.find((prod) => prod._id === item.id);
+            // console.log('product: ', product);
             if (product) {
               const filtered = product?.productData?.filter((data) => data.size === item.productSize && data.color === item.productColor);
               // console.log(filtered);
               // Calculate the new quantities for each filtered item
               const updatedQuantities = filtered?.map((data) => ({...data,quantity: data.quantity - item.productCount}));
-              console.log(updatedQuantities)
+              // console.log(updatedQuantities)
               // Update the main product's productCount
-              const updatedProductCount = product.productCount - item.productCount;
+              // const updatedProductCount = product.productCount - item.productCount;
+              // console.log('updatedProductCount: ', updatedProductCount);
               // Update the Firestore document
               // const productDocRef = doc(db, "product", item.id);
               // Create the updated product data by merging the updated quantities back into the productData array
@@ -111,15 +113,12 @@ const Checkout = () => {
                 const updatedItem = updatedQuantities.find((updated) =>updated.size === data.size && updated.color === data.color);
                 return updatedItem ? updatedItem : data;
               });
-
-              // await setDoc(
-              //   productDocRef,
-              //   {
-              //     productCount: updatedProductCount,
-              //     productData: updatedProductData,
-              //   },
-              //   { merge: true }
-              // );
+              console.log('updatedProductData: ', updatedProductData);
+              const updatedProduct = {
+                // productCount: updatedProductCount,
+                // productData: updatedProductData,
+              };
+              await dispatch(updateProductData(item.id, updatedProductData));
             }
           } catch (error) {
             console.error("Error updating product count:", error);

@@ -43,7 +43,7 @@ const Profile = () => {
 
   const handleSubmitPassword = (e) => {
     e.preventDefault();
-    console.log(formData, "formData");
+    // console.log(formData, "formData");
     const valid = validPassword();
     if (isEmpty(valid)) {
       // updateUserPassword();

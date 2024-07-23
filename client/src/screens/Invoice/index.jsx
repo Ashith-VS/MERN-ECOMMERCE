@@ -7,9 +7,11 @@ import { format } from "date-fns";
 const Invoice = () => {
   const { currentUser } = useSelector((state) => state.authReducer);
   const { id } = useParams();
+  
   const { allPreviousCollection } = useSelector((state) => state.commonReducer);
-  console.log("allPreviousCollection: ", allPreviousCollection[0].userData);
+  // console.log("allPreviousCollection: ", allPreviousCollection[0].userData);
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(GetOrderCollection(currentUser?._id));
   }, []);
@@ -19,18 +21,16 @@ const Invoice = () => {
   allPreviousCollection?.forEach((item) => {
     order?.push(item?.orderItems);
     user?.push(item?.userData);
-    console.log('item?.userData: ', item?.userData);
   });
-  console.log('user88: ', user);
 
   const orders = order.flat();
 
-  const filteredResult = orders?.filter((item) => item.id === id);
+  const filteredResult = orders?.filter((item) =>item.uid === Number(id));
+ 
 
   // const filteredUser = Object.values(user)?.filter((item) => item?.id === id);
   // console.log("filteredUser: ", filteredUser);
   const filteredUser=user
-  console.log('filteredUser: ', filteredUser);
 
   const totalPrice = filteredResult.reduce((total, item, i) => {
     return total + item.totalPrice * item.productCount;

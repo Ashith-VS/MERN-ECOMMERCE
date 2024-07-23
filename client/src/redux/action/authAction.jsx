@@ -20,7 +20,7 @@ export const CreateUserAuth =(user, navigate) => {
   return async (dispatch) => {
     try {
       const res=await fetchData('/register',"post",user)
-      console.log('res: ', res);
+      // console.log('res: ', res);
      if (res.status === 200) {
       dispatch({ type: AUTH_CREATE_SUCCESS, payload: res });
       navigate("/signin"); 
@@ -59,7 +59,7 @@ export const LoggedUserAuth = (formdata, navigate) => {
   return async (dispatch) => {
     try {
       const res=await fetchData('/login',"post",formdata)
-      console.log(res)
+      // console.log(res)
       if (res.status === 200) {
         dispatch({ type: AUTH_LOGIN_SUCCESS, payload: res });
         // // Fetch and set the current user
@@ -82,18 +82,18 @@ export const LoggedUserAuth = (formdata, navigate) => {
 };
 
 export const GoogleLoginUserAuth=(user,navigate)=>{
-  console.log('user: ', user);
+  // console.log('user: ', user);
   return async (dispatch)=>{
     try {
 const res= await fetchData("/googlelogin","post",user)
-console.log('res: ', res);
+// console.log('res: ', res);
 if (res.status === 200) {
   dispatch({ type: AUTH_LOGIN_SUCCESS, payload: res });
   // // Fetch and set the current user
   const userRes = await fetchData('/currentuser', 'get', null, {
     Authorization: `${res.token}`
   });
-  console.log('res.jwtToken: ', res.token);
+  // console.log('res.jwtToken: ', res.token);
   // console.log('userRes: ', userRes);
   if (userRes.status === 200) {
     dispatch({ type: CURRENT_USER_DATA, payload: userRes.user });
@@ -115,7 +115,7 @@ if (res.status === 200) {
 
 
 export const CurrentUserAuth = (response) => {
-  console.log('response: ', response);
+  // console.log('response: ', response);
   // localStorage.setItem("currentUser", JSON.stringify(response));
   return {
     type: CURRENT_USER_DATA,

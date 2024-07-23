@@ -163,39 +163,47 @@ const orderSchema = new mongoose.Schema({
     totalPrice: {
       type: Number,
       required: true,
+    },
+    uid:{
+      type: Number,
+      required: true,
     }
   }],
-    userData: {
-      name: {
-        type: String,
-        required: true,
-      },
-      email: {
-        type: String,
-        required: true,
-      },
-      mobile: {
-        type: String,
-        required: true,
-      },
-      address1: {
-        type: String,
-        required: true,
-      },
-      paymentMethod: {
-        type: String,
-        default:"credit card",
-      },
-      orderStatus: {
-        type: String,
-        default: 'pending',
-      },
-      orderDate: {
-        type: Date,
-        default: Date.now,
-      },
-    }
-  
+  userData: {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    mobile: {
+      type: String,
+      required: true,
+    },
+    address1: {
+      type: String,
+      required: true,
+    },
+    paymentMethod: {
+      type: String,
+      default: "credit card",
+    },
+    orderStatus: {
+      type: String,
+      default: 'pending',
+    },
+    orderDate: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  uid: {
+    type: Number,
+    required: true,
+  }
+
 })
 // Create a model from the schema
 const productDataModel = mongoose.model('Product', ProductSchema)

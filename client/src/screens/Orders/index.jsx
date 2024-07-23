@@ -12,7 +12,9 @@ const Orders = () => {
   useEffect(() => {
     dispatch(GetOrderCollection(currentUser?._id));
   }, []);
-  // console.log(allPreviousCollection);
+  
+  const uid= allPreviousCollection.map((item) => item?.uid);
+
 
   return (
     <div className="container mb-3">
@@ -77,10 +79,10 @@ const Orders = () => {
                           </span>
                         </div>
                         <div>
-                          {console.log(item.id)}
+                        
                           <span className="me-2">Invoice:</span>
                           <span className="text-success">
-                            <Link to={`/invoice/${item?.id}`}>
+                            <Link to={`/invoice/${item?.uid}`}>
                               <i className="bi bi-receipt-cutoff me-1" />
                               Download
                             </Link>

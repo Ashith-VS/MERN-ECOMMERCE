@@ -1,29 +1,31 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import {AddWishList,GetWishlist,cartItems} from "../../redux/action/commonAction";
+import {AddWishList,GetWishlist,cartItems, getCartItem} from "../../redux/action/commonAction";
 import { isEmpty } from "lodash";
 
 const WishList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cartItem, wishList } = useSelector((state) => state.commonReducer);
-  console.log('wishList: ', wishList);
   const { currentUser } = useSelector((state) => state.authReducer);
-  console.log('currentUser: ', currentUser);
 
   useEffect(() => {
-    dispatch(GetWishlist(currentUser?._id));
-  }, []);
+    if(currentUser?._id){
+      dispatch(getCartItem(currentUser?._id));
+      dispatch(GetWishlist(currentUser?._id));
+      }
+  }, [currentUser?._id]);
 
   const handleAddToCart = async(product) => {
     const productExists = cartItem.find((item) => item.id === product.id);
     const productCountupdate = { ...product, productCount: 1 };
     if (productExists) {
-      navigate("/cart");
+      // navigate("/cart");
       return;
     } else {
-     await dispatch(cartItems([...cartItem, productCountupdate], currentUser?.uid));
+     await dispatch(cartItems([...cartItem, productCountupdate], currentUser?._id));
+     await dispatch(getCartItem(currentUser?._id));
     }
   };
 
@@ -31,10 +33,11 @@ const WishList = () => {
     const productExists = wishList.find((product) => product.id === item.id);
     const updatedWishlist = wishList.filter((product) => product.id !== item.id);
     if (productExists) {
-      await dispatch(AddWishList(updatedWishlist, currentUser?.uid));
+      await dispatch(AddWishList(updatedWishlist, currentUser?._id));
     } else {
-      await dispatch(AddWishList([...wishList, item], currentUser?.uid));
+      await dispatch(AddWishList([...wishList, item], currentUser?._id));
     }
+    await dispatch(GetWishlist(currentUser?._id));
   };
 
   return (
@@ -81,10 +84,10 @@ const WishList = () => {
                   <div className="card-footer">
                     <div className="mb-2">
                       <span className="fw-bold h5 me-2">
-                        ${item.productPrice}
+                        ${item.totalPrice}
                       </span>
                       <del className="small text-muted me-2">
-                        ${parseInt(item.productPrice) + 10}
+                        ${parseInt(item.totalPrice) + 10}
                       </del>
                       <span className="rounded p-1 bg-warning me-2 small">
                         -10%
