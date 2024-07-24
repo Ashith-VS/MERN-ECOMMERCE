@@ -33,19 +33,23 @@ const AllProducts = () => {
       // navigate("/cart");
       return;
     } else {
+      if(currentUser?._id){
       await dispatch(cartItems([...cartItem, newProductItem], currentUser?._id));
       await dispatch(getCartItem(currentUser?._id));
+      }else{
+        alert("Please Login to add product to cart")
+      }
     }
   };
 
   const handleEdit = (product) => {
-    navigate(`/admin/${product.id}`);
+    navigate(`/admin/${product?._id}`);
   };
 
   const handleDelete = async (product) => {
     try {
-      await dispatch(deleteProductData(product?.id));
-      await dispatch(GetProductData()); // Refresh product data
+      await dispatch(deleteProductData(product?._id));
+      await dispatch(GetProductData()); 
     } catch (error) {
       console.error(error);
     }

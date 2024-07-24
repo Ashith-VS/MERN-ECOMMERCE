@@ -194,11 +194,45 @@ export const GetOrderCollection = (currentUser) => {
   };
 };
 
+export const updateProductCount = (id, product) => {
+  return async (dispatch) => {
+    try {
+      const res = await fetchData(`/updateproduct/${id}`, "post", {
+          id,
+          product,
+      });
+      dispatch({
+        type: UPDATE_PRODUCT_DATA,
+        payload: res,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const deleteProductData = (id) => {
+  console.log(id)
+  return async (dispatch) => {
+    try {
+      const res = await fetchData("/deleteProduct", "delete", {id});
+      console.log(res)
+      dispatch({
+        type: DELETE_PRODUCT_DATA,
+        payload: res,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+
 export const GetUserData = () => {
   return async (dispatch) => {
     dispatch(showLoader(true));
     try {
-      const res = await fetchData("/user", "get");
+      const res = await fetchData("/users", "get");
       dispatch({
         type: GET_USER_DATA,
         payload: res?.users,
@@ -212,18 +246,11 @@ export const GetUserData = () => {
 };
 
 export const deleteUser = (currentUser) => {
+  console.log('currentUser: ', currentUser);
   return async (dispatch) => {
     dispatch(showLoader(true));
     try {
-      const res = await fetchData("/deleteUser", "post", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          userId: currentUser,
-        },
-      });
-      // console.log(res);
+      const res = await fetchData("/deleteUser", "delete", {id: currentUser});
       dispatch({
         type: USER_DELETED,
         payload: res,
@@ -236,40 +263,11 @@ export const deleteUser = (currentUser) => {
   };
 };
 
-export const deleteProductData = (id) => {
-  // console.log(id)
-  return async (dispatch) => {
+export const updateProductData=()=>{
+  return async (dispatch)=>{
     try {
-      const res = await fetchData("/deleteProduct", "post", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          id: id,
-        },
-      });
-      // console.log(res)
-      dispatch({
-        type: DELETE_PRODUCT_DATA,
-        payload: res,
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
-
-
-export const updateProductData = (id, product) => {
-  // console.log('product444: ', product);
-  // console.log('id77: ', id);
-  return async (dispatch) => {
-    try {
-      const res = await fetchData(`/updateproduct/${id}`, "post", {
-          id,
-          product,
-      });
-      // console.log(res)
+      const res = await fetchData("/updateproduct", "put",{});
+      console.log('res: ', res);
       dispatch({
         type: UPDATE_PRODUCT_DATA,
         payload: res,
@@ -277,5 +275,9 @@ export const updateProductData = (id, product) => {
     } catch (error) {
       console.error(error);
     }
-  };
-};
+  }
+}
+
+
+
+

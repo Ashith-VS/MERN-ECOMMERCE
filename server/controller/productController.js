@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { productDataModel, CartItemModel, wishlistModel, orderModel, } = require("../model/ProductModel");
+const UserData = require('../model/User');
 
 const addProduct = async (req, res) => {
     try {
@@ -164,24 +165,20 @@ const getOrders = async (req, res) => {
     }
 }
 
-const updateProduct = async (req, res) => {
+const updateProductCount = async (req, res) => {
     try {
         const { id } = req.params;
         const { product } = req.body;
-        // console.log('req.body: ', product);
-
         // Ensure id is a valid ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ status: 400, message: 'Invalid ID format' });
         }
-
         // Update the document
         const updatedProduct = await productDataModel.findByIdAndUpdate(
             id,
-            { $set: { productData: product } }, 
-            { new: true, runValidators: true } 
+            { $set: { productData: product } },
+            { new: true, runValidators: true }
         );
-        // console.log('updatedProduct: ', updatedProduct);
 
         if (!updatedProduct) {
             return res.status(404).json({ status: 404, message: 'Product not found' });
@@ -193,6 +190,91 @@ const updateProduct = async (req, res) => {
     }
 };
 
+const deleteProductData = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const result = await productDataModel.findByIdAndDelete(id);
+        if (!result) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+        res.status(200).json({ message: "Product deleted successfully" });
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+const getUsers = async (req, res) => {
+    try {
+        const users = await UserData.find();
+        res.status(200).json({ status: 200, users });
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+const deleteUsers = async (req, res) => {
+    try {
+        const { id } = req.body;
+        console.log('id44: ', id);
+        const userResult = await UserData.findByIdAndDelete(id)
+        if (!userResult) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+const blockUser = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const user = await UserData.findByIdAndUpdate(id, { blocked: true })
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User blocked successfully" });
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+const unblockUser = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const user = await UserData.findByIdAndUpdate(id, { blocked: false })
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User unblocked successfully" });
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+const updatedProduct= async (req, res) => {
+    try {
+        const { id, productData } = req.body;
+        console.log('productData: ', productData);
+        console.log('id: ', id);
+        const product = await productDataModel.findByIdAndUpdate(id, { productData: productData }, { new: true, runValidators: true });
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+        res.status(200).json({ message: "Product updated successfully"});
+        
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).json({ message: "Server error" });
+    }
+
+}
 
 
-module.exports = { addProduct, allProductList, singleProductList, addToCart, getCartItems, removeCartItems, addToWishlist, getWishlistItems, addToOrders, getOrders, updateProduct };
+
+module.exports = { addProduct, allProductList, singleProductList, addToCart, getCartItems, removeCartItems, addToWishlist, getWishlistItems, addToOrders, getOrders, updateProductCount, deleteProductData, getUsers, deleteUsers, blockUser,unblockUser,updatedProduct };

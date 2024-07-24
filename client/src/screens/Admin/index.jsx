@@ -4,20 +4,15 @@ import { isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "./sideBar";
 import { useParams } from "react-router-dom";
-import {
-  GetProductData,
-  addProductData,
-  updateProductData,
-} from "../../redux/action/commonAction";
+import {GetProductData,addProductData,updateProductData} from "../../redux/action/commonAction";
 import Modal from "react-modal";
 
 const Admin = () => {
   const { id } = useParams();
+  console.log('id: ', id);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authReducer);
-  // console.log('currentUser: ', currentUser);
   const { productData } = useSelector((state) => state.commonReducer);
-  // console.log('productData: ', productData);
   const [errors, setErrors] = useState({});
   const inputdata = json.admin;
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -38,7 +33,8 @@ const Admin = () => {
 
   useEffect(() => {
     if (id && productData.length > 0) {
-      const filteredData = productData.find((item) => item.id === id);
+      const filteredData = productData.find((item) => item._id === id);
+      console.log('filteredData: ', filteredData);
       if (filteredData) {
         setFormData({
           productName: filteredData.productName || "",
@@ -57,9 +53,7 @@ const Admin = () => {
   const updateProduct = async () => {
     try {
       const countss = formData.productCount ?? counts;
-      await dispatch(
-        updateProductData(id, { ...formData, id, productCount: countss })
-      );
+      await dispatch(updateProductData(id, { ...formData, id, productCount: countss }));
     } catch (error) {
       console.error(error);
     }

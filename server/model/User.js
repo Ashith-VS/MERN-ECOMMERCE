@@ -23,6 +23,10 @@ const mongoose = require('mongoose')
           type: String,
           default: 'user',
         },
+        blocked:{
+          type: Boolean,
+          default: false,
+        }
       }, {
         timestamps: true,
       },)

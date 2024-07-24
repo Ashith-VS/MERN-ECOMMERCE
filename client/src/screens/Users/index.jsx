@@ -1,9 +1,8 @@
-import { doc, updateDoc } from "firebase/firestore";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash";
-import { db } from "../../services/firebase";
 import { GetUserData, deleteUser } from "../../redux/action/commonAction";
+import fetchData from "../../http/api";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -16,15 +15,20 @@ const Users = () => {
 
   const handleBlock = async (userId) => {
     try {
-      const userDoc = doc(db, "user", userId);
-      await updateDoc(userDoc, { blocked: true });
-      users?.map((user) =>
-        user.id === userId ? { ...user, blocked: true } : user
-      );
+      await fetchData("/blockUser","patch",{id: userId});
+      dispatch(GetUserData());
     } catch (error) {
       console.error("Error blocking user: ", error);
     }
   };
+  const handleUnblock = async (userId) => {
+    try {
+      await fetchData("/unblockUser","patch",{id: userId});
+      dispatch(GetUserData());
+    } catch (error) {
+      console.error("Error unblocking user: ", error);
+    }
+  }
 
   const handleDelete = async (userId) => {
     try {
@@ -35,7 +39,7 @@ const Users = () => {
     }
   };
 
-  const filteredData = users?.filter((item) => item.uid !== currentUser.uid);
+  const filteredData = users?.filter((item) => item?._id !== currentUser?._id);
   return (
     <>
       {currentUser?.role === "admin" && (
@@ -46,7 +50,6 @@ const Users = () => {
               <p className=" text-center pt-4">No Users Found</p>
             </div>
           )}
-
           <div>
             <table className="table table-striped table-bordered text-center">
               <thead className="thead-dark">
@@ -58,25 +61,30 @@ const Users = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredData?.map((item) => (
-                  <tr key={item.id}>
+                {filteredData?.map((item,i) => (
+                  <tr key={item._id}>
                     <td>{item.name}</td>
-                    <td>{item.uid}</td>
+                    <td>{i+1}</td>
                     <td>{item.email}</td>
                     <td>
                       <button
                         className="btn btn-secondary mt-2"
-                        onClick={() => handleBlock(item.id)}
+                        onClick={() => handleBlock(item._id)}
                       >
-                        {item?.blocked ? "blocked" : "block"}
+                       block
                       </button>
                       &ensp;
-                      <button
+                      {item && item.blocked === true ?
+                      (<button
                         className="btn btn-warning mt-2 "
-                        onClick={() => handleDelete(item.id)}
+                        onClick={() => handleUnblock(item._id)}
+                      >unblock</button>):
+                      (<button
+                        className="btn btn-warning mt-2 "
+                        onClick={() => handleDelete(item._id)}
                       >
                         Delete
-                      </button>
+                      </button>)}
                     </td>
                   </tr>
                 ))}

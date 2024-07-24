@@ -74,9 +74,7 @@ const googleLogin = async(req, res) => {
 
 const currentUser = async(req,res)=>{
 try {
-    // console.log(req.userId,"PPPPP")
     const user = await UserData.findById(req.userId).select('-password'); //remove password from user
-    // console.log('user: ', user);
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
     }
@@ -86,6 +84,8 @@ try {
     res.status(500).json({ message: 'Error retrieving user data' });
 }
 }
+
+
 
 
 module.exports ={googleLogin,loginUser, registerUser,currentUser}

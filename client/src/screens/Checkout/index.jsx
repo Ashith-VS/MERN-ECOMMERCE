@@ -4,7 +4,7 @@ import json from "../../../../client/src/constants/data.json";
 import img from "../../assets/images/payment/cards.webp";
 import { isEmpty } from "lodash";
 import { useNavigate } from "react-router-dom";
-import {OrderCollection,cartItems,getCartItem, updateProductData} from "../../redux/action/commonAction";
+import {OrderCollection,cartItems,getCartItem, updateProductCount} from "../../redux/action/commonAction";
 
 const Checkout = () => {
   const dispatch = useDispatch();
@@ -118,7 +118,7 @@ const Checkout = () => {
                 // productCount: updatedProductCount,
                 // productData: updatedProductData,
               };
-              await dispatch(updateProductData(item.id, updatedProductData));
+              await dispatch(updateProductCount(item.id, updatedProductData));
             }
           } catch (error) {
             console.error("Error updating product count:", error);

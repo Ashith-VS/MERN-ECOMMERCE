@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Loader from "../components/Loader";
 import TopMenu from "../components/TopMenu";
 import ScrollToTop from "../components/ScrollToTop";
-import {Registration,Login,NotFound,Home,Admin,Allproducts,ProductDetail,Category,Profile, Blog, Contact, Support, Notification, WishList, Orders, Cart, Checkout, Invoice} from "../screens";
+import {Registration,Login,NotFound,Home,Admin,Allproducts,ProductDetail,Category,Profile, Blog, Contact, Support, Notification, WishList, Orders, Cart, Checkout, Invoice, Users} from "../screens";
 import PrivateRoute from "../utils/PrivateRoute";
 
 const Router = () => {
@@ -25,9 +25,7 @@ const Router = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/invoice/:id" element={<Invoice />} />
-         {/* 
           <Route path="/users" element={<Users />} />
-          */}
           <Route path="/notification" element={<Notification />} />
           <Route path="/support" element={<Support />} />
         </Route>

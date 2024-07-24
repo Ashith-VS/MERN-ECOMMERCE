@@ -112,7 +112,6 @@ const ProductDetail = () => {
         totalPrice: filteredData?.productPrice * formData?.productCount || null,
       };
       if (!isEmpty(currentUser?._id)) {
-        // console.log(cartItemsArray)
         await dispatch(cartItems([...cartItemsArray, value], currentUser?._id));
         // await dispatch(getCartItem(currentUser?._id));
         // navigate("/cart");
@@ -122,11 +121,11 @@ const ProductDetail = () => {
         //   productColor: "",
         //   productSize: "",
         // });
+        await dispatch(getCartItem(currentUser?._id))
       } 
       else {
         alert("Please login to use Add to Cart");
       }
-      await dispatch(getCartItem(currentUser?._id))
     }
   };
 
@@ -136,7 +135,7 @@ const ProductDetail = () => {
   };
 
   const handleEdit = (product) => {
-    navigate(`/admin/${product.id}`);
+    navigate(`/admin/${product._id}`);
   };
 
   // useEffect(() => {
@@ -160,7 +159,6 @@ const ProductDetail = () => {
     (total, item) => total + Number(item.quantity),
     0
   );
-  // console.log(counts)
 
   const filteredColor = filteredData?.productData?.filter(
     (item) => item.size === formData?.productSize

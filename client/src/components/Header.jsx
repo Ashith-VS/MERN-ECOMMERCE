@@ -1,11 +1,8 @@
-// import { signOut } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
-// import { auth } from "../services/firebase";
+import { Link} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash";
 import img from "../assets/images/image-logo-151x42.jpg";
 import SearchBar from "./SearchBar";
-// import { getCartItem } from "../redux/action/commonAction";
 import { useEffect, useState } from "react";
 import fetchData from "../http/api";
 import { CurrentUserAuth } from "../redux/action/authAction";
@@ -30,7 +27,9 @@ const [showModal, setShowModal] = useState(false);
     }
   }
   useEffect(()=>{
+    if(currentUser?._id){
     getCurrentUser()
+    }
   },[])
 
   useEffect(() => {
@@ -49,8 +48,8 @@ const [showModal, setShowModal] = useState(false);
 
   const handleCartClick = (e) => {
     if (isEmpty(currentUser)) {
-      e.preventDefault(); // Prevent the default action
-      setShowModal(true); // Show the login modal
+      e.preventDefault(); 
+      setShowModal(true); 
     }
   };
 

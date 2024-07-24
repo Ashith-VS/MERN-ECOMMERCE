@@ -12,7 +12,7 @@ import WishList from "./WishList";
 import Checkout from "./Checkout";
 import Orders from "./Orders";
 import Invoice from "./Invoice";
-// import Users from "./Users";
+import Users from "./Users";
 import Notification from "./Notification";
 import Support from "./Support";
 import Contact from "./Contact";
@@ -32,7 +32,7 @@ export {
   Checkout,
   Orders,
   Invoice,
-  // Users,
+  Users,
   Notification,
   Support,
   Contact,

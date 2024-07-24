@@ -41,9 +41,13 @@ const CategoryDetail = ({ viewMode }) => {
       // alert("The product already added to cart");
       return;
     } else {
+      if(currentUser?._id){
       await dispatch(cartItems([...cartItem, newProductItem], currentUser?._id));
       await dispatch(getCartItem(currentUser?._id));
+    }else{
+      alert("Please login to add product to cart");
     }
+  }
   };
 
   const handleAddToWishlist = async (item) => {
@@ -51,7 +55,9 @@ const CategoryDetail = ({ viewMode }) => {
     const updatedWishlist = wishList?.filter((product) => product.id !== item._id);
     if (productExists) {
       await dispatch(AddWishList(updatedWishlist, currentUser?._id));
+      await dispatch(GetWishlist(currentUser?._id));
     } else {
+      if (currentUser?._id) {
       const newWishlistItem = {
         id: item?._id,
         productName: item?.productName,
@@ -64,8 +70,11 @@ const CategoryDetail = ({ viewMode }) => {
         totalPrice: item?.productPrice ,
       };
       await dispatch(AddWishList([...wishList, newWishlistItem], currentUser?._id));
+      await dispatch(GetWishlist(currentUser?._id));
+    }else{
+      alert("Please login to use Add to Wishlist");
     }
-    await dispatch(GetWishlist(currentUser?._id));
+  }
   };
 
   return (
