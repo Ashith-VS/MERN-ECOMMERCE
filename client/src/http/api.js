@@ -47,11 +47,11 @@ const fetchData = async (endpoint, method = 'GET', data = {}, headers = {}) => {
             // Server responded with a status other than 2xx
             throw new Error(error.response.data.message || 'An error occurred');
         } else if (error.request) {
-            console.log("error.request", error.request);
+            // console.log("error.request", error.request);
             // Request was made but no response received
             throw new Error('No response received from server');
         } else {
-            console.log("error.message", error.message)
+            // console.log("error.message", error.message)
             // Something happened in setting up the request
             throw new Error(error.message);
         }
